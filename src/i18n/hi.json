@@ -53,12 +53,37 @@
       "messageConcurrent": "एक साथ प्रोसेस होने वाले संदेश",
       "messagePending": "अधिकतम प्रतीक्षारत संदेश",
       "messageTimeout": "संदेश कतार समय सीमा",
-      "maxConcurrent": "एक साथ मीडिया कार्य", "maxPending": "अधिकतम मीडिया कतार", "timeout": "कुल मीडिया समय सीमा", "ffmpeg": "एक साथ FFmpeg प्रक्रियाएँ",
-      "size": { "image": "चित्र सीमा", "audio": "ऑडियो सीमा", "video": "वीडियो सीमा", "document": "दस्तावेज़ सीमा", "sticker": "स्टिकर सीमा" },
-      "providerRetries": "प्रति YouTube प्रदाता प्रयास", "retryDelay": "प्रयासों के बीच अंतराल", "maxFailures": "कूलडाउन से पहले विफलताएँ", "cooldown": "प्रदाता कूलडाउन", "logLevel": "लॉग स्तर", "maxBackups": "अपडेट बैकअप संख्या",
-      "jobs": "कार्य", "messages": "संदेश", "seconds": "सेकंड", "attempts": "प्रयास", "failures": "विफलताएँ", "minutes": "मिनट", "backups": "बैकअप",
-      "invalidRange": "{{min}} और {{max}} के बीच पूर्णांक दर्ज करें।", "invalidLogLevel": "अमान्य स्तर। debug, info, warn, error या silent उपयोग करें।",
-      "summary": "कार्य सारांश:", "confirm": "यह उन्नत कॉन्फ़िगरेशन सहेजें?", "cancelled": "उन्नत कॉन्फ़िगरेशन रद्द किया गया।", "saved": "उन्नत कॉन्फ़िगरेशन सहेजा गया।", "restartRequired": "नई सेटिंग लागू करने के लिए बॉट पुनः शुरू करें।"
+      "maxConcurrent": "एक साथ मीडिया कार्य",
+      "maxPending": "अधिकतम मीडिया कतार",
+      "timeout": "कुल मीडिया समय सीमा",
+      "ffmpeg": "एक साथ FFmpeg प्रक्रियाएँ",
+      "size": {
+        "image": "चित्र सीमा",
+        "audio": "ऑडियो सीमा",
+        "video": "वीडियो सीमा",
+        "document": "दस्तावेज़ सीमा",
+        "sticker": "स्टिकर सीमा"
+      },
+      "providerRetries": "प्रति YouTube प्रदाता प्रयास",
+      "retryDelay": "प्रयासों के बीच अंतराल",
+      "maxFailures": "कूलडाउन से पहले विफलताएँ",
+      "cooldown": "प्रदाता कूलडाउन",
+      "logLevel": "लॉग स्तर",
+      "maxBackups": "अपडेट बैकअप संख्या",
+      "jobs": "कार्य",
+      "messages": "संदेश",
+      "seconds": "सेकंड",
+      "attempts": "प्रयास",
+      "failures": "विफलताएँ",
+      "minutes": "मिनट",
+      "backups": "बैकअप",
+      "invalidRange": "{{min}} और {{max}} के बीच पूर्णांक दर्ज करें।",
+      "invalidLogLevel": "अमान्य स्तर। debug, info, warn, error या silent उपयोग करें।",
+      "summary": "कार्य सारांश:",
+      "confirm": "यह उन्नत कॉन्फ़िगरेशन सहेजें?",
+      "cancelled": "उन्नत कॉन्फ़िगरेशन रद्द किया गया।",
+      "saved": "उन्नत कॉन्फ़िगरेशन सहेजा गया।",
+      "restartRequired": "नई सेटिंग लागू करने के लिए बॉट पुनः शुरू करें।"
     },
     "connection": {
       "title": "कनेक्शन का तरीका",
@@ -266,7 +291,8 @@
         "funFemalePercent": "प्रतिशत (महिला)",
         "funMaleRank": "रैंक (पुरुष)",
         "funFemaleRank": "रैंक (महिला)",
-        "funInteractions": "मज़ेदार क्रियाएँ"
+        "funInteractions": "मज़ेदार क्रियाएँ",
+        "ia": "कृत्रिम बुद्धिमत्ता"
       },
       "cmds": {
         "ping": "ping",
@@ -345,7 +371,9 @@
         "menubrincadeira": "funmenu",
         "percent": "percent",
         "rank": "rank",
-        "interact": "interact"
+        "interact": "interact",
+        "ia": "ia",
+        "menuia": "menuia"
       }
     },
     "play": {
@@ -644,7 +672,9 @@
     "statusbot": {
       "text": "╭─「 *बॉट स्थिति* 」\n│\n│ बॉट: {{bot}}\n│ मालिक: {{owner}}\n│ नंबर: {{ownerNumber}}\n│ jid: {{user}}\n│ वैश्विक प्रीफ़िक्स: {{prefix}}\n│ भाषा: {{language}}\n│ स्वचालित अपडेट: {{autoUpdate}}\n│ एंटी-प्राइवेट: {{antiPrivate}}\n│ सहेजे गए समूह: {{groups}}\n│ bangp समूह: {{bannedGroups}}\n│ ब्लॉक किए गए उपयोगकर्ता: {{blockedUsers}}\n│ ब्लॉक किए गए कमांड: {{blockedCommands}}\n│ चालू समय: {{uptime}}\n│\n╰─"
     },
-    "statusVersion": { "text": "╭─「 *संस्करण* 」\n│ एप्लिकेशन: {{version}}\n│ commit: {{commit}}\n│ schema: {{schema}}\n╰─" },
+    "statusVersion": {
+      "text": "╭─「 *संस्करण* 」\n│ एप्लिकेशन: {{version}}\n│ commit: {{commit}}\n│ schema: {{schema}}\n╰─"
+    },
     "statusMetrics": {
       "text": "╭─「 *मेट्रिक्स* 」\n│ संदेश: {{messages}} · त्रुटियाँ: {{messageErrors}}\n│ प्रोसेस सक्रिय/प्रतीक्षा: {{messageActive}}/{{messagePending}}\n│ छोड़े गए/टाइमआउट: {{messageDropped}}/{{messageTimeouts}}\n│ कमांड: {{commands}} · त्रुटियाँ: {{commandErrors}} · अस्वीकृत: {{denied}}\n│ मीडिया सफल/त्रुटि: {{mediaSuccess}}/{{mediaErrors}} · बाइट: {{mediaBytes}}\n│ कतार सक्रिय/प्रतीक्षा: {{active}}/{{pending}} · ffmpeg: {{ffmpeg}}\n│ कैश हिट: {{cacheRate}} · पुनः कनेक्शन: {{reconnects}}\n│ औसत कमांड/मीडिया: {{avgCommand}} / {{avgMedia}}\n│ rss/heap/cpu: {{rss}} / {{heap}} / {{cpu}}\n│ कमांड विफलताएँ: {{commandFailures}}\n│ प्रदाता विफलताएँ: {{providerFailures}}\n╰─"
     },

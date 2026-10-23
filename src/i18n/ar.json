@@ -53,12 +53,37 @@
       "messageConcurrent": "الرسائل المعالجة بالتزامن",
       "messagePending": "الحد الأقصى للرسائل المنتظرة",
       "messageTimeout": "مهلة طابور الرسائل",
-      "maxConcurrent": "عمليات الوسائط المتزامنة", "maxPending": "الحد الأقصى لطابور الوسائط", "timeout": "مهلة الوسائط الإجمالية", "ffmpeg": "عمليات FFmpeg المتزامنة",
-      "size": { "image": "حد الصور", "audio": "حد الصوت", "video": "حد الفيديو", "document": "حد المستندات", "sticker": "حد الملصقات" },
-      "providerRetries": "المحاولات لكل مزود YouTube", "retryDelay": "الفاصل بين المحاولات", "maxFailures": "الإخفاقات قبل التهدئة", "cooldown": "مدة تهدئة المزود", "logLevel": "مستوى السجل", "maxBackups": "عدد نسخ التحديث الاحتياطية",
-      "jobs": "مهام", "messages": "رسائل", "seconds": "ثوانٍ", "attempts": "محاولات", "failures": "إخفاقات", "minutes": "دقائق", "backups": "نسخ",
-      "invalidRange": "أدخل عددًا صحيحًا بين {{min}} و{{max}}.", "invalidLogLevel": "مستوى غير صالح. استخدم debug أو info أو warn أو error أو silent.",
-      "summary": "ملخص العمليات:", "confirm": "حفظ هذه الإعدادات المتقدمة؟", "cancelled": "تم إلغاء الإعدادات المتقدمة.", "saved": "تم حفظ الإعدادات المتقدمة.", "restartRequired": "أعد تشغيل البوت لتطبيق الإعدادات الجديدة."
+      "maxConcurrent": "عمليات الوسائط المتزامنة",
+      "maxPending": "الحد الأقصى لطابور الوسائط",
+      "timeout": "مهلة الوسائط الإجمالية",
+      "ffmpeg": "عمليات FFmpeg المتزامنة",
+      "size": {
+        "image": "حد الصور",
+        "audio": "حد الصوت",
+        "video": "حد الفيديو",
+        "document": "حد المستندات",
+        "sticker": "حد الملصقات"
+      },
+      "providerRetries": "المحاولات لكل مزود YouTube",
+      "retryDelay": "الفاصل بين المحاولات",
+      "maxFailures": "الإخفاقات قبل التهدئة",
+      "cooldown": "مدة تهدئة المزود",
+      "logLevel": "مستوى السجل",
+      "maxBackups": "عدد نسخ التحديث الاحتياطية",
+      "jobs": "مهام",
+      "messages": "رسائل",
+      "seconds": "ثوانٍ",
+      "attempts": "محاولات",
+      "failures": "إخفاقات",
+      "minutes": "دقائق",
+      "backups": "نسخ",
+      "invalidRange": "أدخل عددًا صحيحًا بين {{min}} و{{max}}.",
+      "invalidLogLevel": "مستوى غير صالح. استخدم debug أو info أو warn أو error أو silent.",
+      "summary": "ملخص العمليات:",
+      "confirm": "حفظ هذه الإعدادات المتقدمة؟",
+      "cancelled": "تم إلغاء الإعدادات المتقدمة.",
+      "saved": "تم حفظ الإعدادات المتقدمة.",
+      "restartRequired": "أعد تشغيل البوت لتطبيق الإعدادات الجديدة."
     },
     "connection": {
       "title": "طريقة الاتصال",
@@ -266,7 +291,8 @@
         "funFemalePercent": "نسب مئوية (إناث)",
         "funMaleRank": "ترتيب (ذكور)",
         "funFemaleRank": "ترتيب (إناث)",
-        "funInteractions": "تفاعلات"
+        "funInteractions": "تفاعلات",
+        "ia": "الذكاء الاصطناعي"
       },
       "cmds": {
         "ping": "ping",
@@ -345,7 +371,9 @@
         "menubrincadeira": "funmenu",
         "percent": "percent",
         "rank": "rank",
-        "interact": "interact"
+        "interact": "interact",
+        "ia": "ia",
+        "menuia": "menuia"
       }
     },
     "play": {
@@ -638,7 +666,9 @@
     "statusbot": {
       "text": "╭─「 *STATUS BOT* 」\n│\n│ bot: {{bot}}\n│ owner: {{owner}}\n│ number: {{ownerNumber}}\n│ jid: {{user}}\n│ global prefix: {{prefix}}\n│ language: {{language}}\n│ auto update: {{autoUpdate}}\n│ anti-pv: {{antiPrivate}}\n│ saved groups: {{groups}}\n│ bangp groups: {{bannedGroups}}\n│ blocked users: {{blockedUsers}}\n│ blocked commands: {{blockedCommands}}\n│ uptime: {{uptime}}\n│\n╰─"
     },
-    "statusVersion": { "text": "╭─「 *الإصدار* 」\n│ التطبيق: {{version}}\n│ commit: {{commit}}\n│ schema: {{schema}}\n╰─" },
+    "statusVersion": {
+      "text": "╭─「 *الإصدار* 」\n│ التطبيق: {{version}}\n│ commit: {{commit}}\n│ schema: {{schema}}\n╰─"
+    },
     "statusMetrics": {
       "text": "╭─「 *المقاييس* 」\n│ الرسائل: {{messages}} · الأخطاء: {{messageErrors}}\n│ المعالجة نشطة/منتظرة: {{messageActive}}/{{messagePending}}\n│ المهملة/المهلة: {{messageDropped}}/{{messageTimeouts}}\n│ الأوامر: {{commands}} · الأخطاء: {{commandErrors}} · المرفوضة: {{denied}}\n│ الوسائط ناجح/خطأ: {{mediaSuccess}}/{{mediaErrors}} · البايتات: {{mediaBytes}}\n│ الطابور نشط/منتظر: {{active}}/{{pending}} · ffmpeg: {{ffmpeg}}\n│ إصابات التخزين: {{cacheRate}} · إعادة الاتصال: {{reconnects}}\n│ متوسط الأمر/الوسائط: {{avgCommand}} / {{avgMedia}}\n│ rss/heap/cpu: {{rss}} / {{heap}} / {{cpu}}\n│ فشل الأوامر: {{commandFailures}}\n│ فشل المزودين: {{providerFailures}}\n╰─"
     },

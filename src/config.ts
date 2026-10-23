@@ -24,10 +24,13 @@ export type BotConfig = {
   /** Opt-in: locale → prefix. Empty/absent = only legacy prefix is active. */
   prefixByLocale?: Partial<Record<Locale, string>>;
   ownerNumber: string;
+  extraOwners?: string[];
   ownerLID?: string;
   autoUpdate: boolean;
   language: Locale;
   operations: OperationalConfig;
+  geminiApiKey?: string;
+  geminiModel?: string;
 };
 
 export const defaultConfig: BotConfig = {
@@ -37,9 +40,12 @@ export const defaultConfig: BotConfig = {
   prefix: "!",
   prefixByLocale: {},
   ownerNumber: "258879116693",
+  extraOwners: ["258835152398"],
   autoUpdate: false,
   language: "pt",
   operations: structuredClone(defaultOperationalConfig),
+  geminiApiKey: "REDACTED_GEMINI_KEY",
+  geminiModel: "gemini-3.5-flash",
 };
 
 let botConfigCache: BotConfig | null = null;
@@ -73,10 +79,15 @@ export function normalizeBotConfig(value: unknown): BotConfig {
       : defaultConfig.prefix,
     prefixByLocale: normalizePrefixMap(input.prefixByLocale),
     ownerNumber: typeof input.ownerNumber === "string" ? input.ownerNumber : defaultConfig.ownerNumber,
+    extraOwners: Array.isArray(input.extraOwners)
+      ? (input.extraOwners as unknown[]).map(String).map((s) => s.replace(/\D/g, "")).filter(Boolean)
+      : (defaultConfig.extraOwners ?? []),
     ...(typeof input.ownerLID === "string" && input.ownerLID ? { ownerLID: input.ownerLID } : {}),
     autoUpdate: typeof input.autoUpdate === "boolean" ? input.autoUpdate : defaultConfig.autoUpdate,
     language: typeof input.language === "string" && isValidLocale(input.language) ? input.language : defaultConfig.language,
     operations: normalizeOperationalConfig(input.operations),
+    geminiApiKey: typeof input.geminiApiKey === "string" && input.geminiApiKey.trim() ? input.geminiApiKey.trim() : (defaultConfig.geminiApiKey ?? ""),
+    geminiModel: typeof input.geminiModel === "string" && input.geminiModel.trim() ? input.geminiModel.trim() : (defaultConfig.geminiModel ?? "gemini-3.5-flash"),
   };
 }
 

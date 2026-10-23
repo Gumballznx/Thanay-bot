@@ -2,7 +2,7 @@
  * @author Gumball · github.com/Gumballxnz
  * @project Thanay Bot
  */
-import { proto, WASocket } from "baileys";
+import { proto, WAMessage, WASocket } from "baileys";
 import { groupCache } from "../cache/groupCache.js";
 import { getBotConfig } from "../config.js";
 import { getGroup } from "../database/groupDB.js";
@@ -10,6 +10,7 @@ import { logCommandActivity, logMessageActivity } from "../helpers/activityLog.j
 import { applyAntiLink } from "../helpers/antiLink.js";
 import { applyAntiStealth, countNormalGroupMessage } from "../helpers/antiStealth.js";
 import { tryHandleApkReply } from "../helpers/apkReply.js";
+import { askGemini } from "../helpers/geminiAI.js";
 import { recordGroupActivity } from "../helpers/groupActivity.js";
 import { isAdmin, isBotAdmin } from "../helpers/isAdmin.js";
 import { isOwnerFromConfig } from "../helpers/isOwner.js";
@@ -187,7 +188,18 @@ export async function processMessage(
     const sessionT = createTranslator(sessionLocale);
     const activityT = createTranslator(runtimeConfig.language || "pt");
     logMessageActivity({ message, from, sender, isGroup, body, t: activityT });
-    await tryHandleApkReply({ thanay, from, sender, body, message, t: sessionT });
+    const apkHandled = await tryHandleApkReply({ thanay, from, sender, body, message, t: sessionT });
+    if (apkHandled) return;
+
+    if (!isGroup && userIsOwner && body.trim()) {
+      await thanay.sendPresenceUpdate("composing", from).catch(() => {});
+      const reply = await askGemini({
+        chatId: from,
+        prompt: body.trim(),
+        senderName: message.pushName || "Dono",
+      });
+      await thanay.sendMessage(from, { text: reply }, { quoted: message as WAMessage });
+    }
     return;
   }
 

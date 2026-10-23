@@ -57,14 +57,26 @@
       "maxPending": "Tamanho máximo da fila de mídia",
       "timeout": "Tempo limite total da mídia",
       "ffmpeg": "Processos FFmpeg simultâneos",
-      "size": { "image": "Limite de imagem", "audio": "Limite de áudio", "video": "Limite de vídeo", "document": "Limite de documento", "sticker": "Limite de sticker" },
+      "size": {
+        "image": "Limite de imagem",
+        "audio": "Limite de áudio",
+        "video": "Limite de vídeo",
+        "document": "Limite de documento",
+        "sticker": "Limite de sticker"
+      },
       "providerRetries": "Tentativas por provider YouTube",
       "retryDelay": "Intervalo entre tentativas",
       "maxFailures": "Falhas antes do cooldown",
       "cooldown": "Cooldown do provider",
       "logLevel": "Nível de log",
       "maxBackups": "Quantidade de backups de atualização",
-      "jobs": "jobs", "messages": "mensagens", "seconds": "segundos", "attempts": "tentativas", "failures": "falhas", "minutes": "minutos", "backups": "backups",
+      "jobs": "jobs",
+      "messages": "mensagens",
+      "seconds": "segundos",
+      "attempts": "tentativas",
+      "failures": "falhas",
+      "minutes": "minutos",
+      "backups": "backups",
       "invalidRange": "Informe um inteiro entre {{min}} e {{max}}.",
       "invalidLogLevel": "Nível inválido. Use debug, info, warn, error ou silent.",
       "summary": "Resumo das operações:",
@@ -279,7 +291,8 @@
         "funFemalePercent": "porcentagens (feminino)",
         "funMaleRank": "ranks (masculino)",
         "funFemaleRank": "ranks (feminino)",
-        "funInteractions": "interações"
+        "funInteractions": "interações",
+        "ia": "inteligência artificial"
       },
       "cmds": {
         "ping": "ping",
@@ -358,7 +371,9 @@
         "menubrincadeira": "menubrincadeira",
         "percent": "percent",
         "rank": "rank",
-        "interact": "interagir"
+        "interact": "interagir",
+        "ia": "ia",
+        "menuia": "menuia"
       }
     },
     "play": {
@@ -651,7 +666,9 @@
     "statusbot": {
       "text": "╭─「 *STATUS BOT* 」\n│\n│ bot: {{bot}}\n│ dono: {{owner}}\n│ número: {{ownerNumber}}\n│ jid: {{user}}\n│ prefixo global: {{prefix}}\n│ idioma: {{language}}\n│ auto update: {{autoUpdate}}\n│ anti-pv: {{antiPrivate}}\n│ grupos salvos: {{groups}}\n│ grupos bangp: {{bannedGroups}}\n│ usuários bloqueados: {{blockedUsers}}\n│ comandos bloqueados: {{blockedCommands}}\n│ uptime: {{uptime}}\n│\n╰─"
     },
-    "statusVersion": { "text": "╭─「 *VERSÃO* 」\n│ aplicação: {{version}}\n│ commit: {{commit}}\n│ schema: {{schema}}\n╰─" },
+    "statusVersion": {
+      "text": "╭─「 *VERSÃO* 」\n│ aplicação: {{version}}\n│ commit: {{commit}}\n│ schema: {{schema}}\n╰─"
+    },
     "statusMetrics": {
       "text": "╭─「 *MÉTRICAS* 」\n│ mensagens: {{messages}} · erros: {{messageErrors}}\n│ processamento ativo/pendente: {{messageActive}}/{{messagePending}}\n│ descartadas/timeout: {{messageDropped}}/{{messageTimeouts}}\n│ comandos: {{commands}} · erros: {{commandErrors}} · negados: {{denied}}\n│ mídia ok/erro: {{mediaSuccess}}/{{mediaErrors}} · bytes: {{mediaBytes}}\n│ fila ativa/pendente: {{active}}/{{pending}} · ffmpeg: {{ffmpeg}}\n│ cache hit: {{cacheRate}} · reconexões: {{reconnects}}\n│ média comando/mídia: {{avgCommand}} / {{avgMedia}}\n│ rss/heap/cpu: {{rss}} / {{heap}} / {{cpu}}\n│ falhas comando: {{commandFailures}}\n│ falhas provider: {{providerFailures}}\n╰─"
     },

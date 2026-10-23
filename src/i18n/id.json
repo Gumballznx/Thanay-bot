@@ -57,14 +57,26 @@
       "maxPending": "Ukuran maksimum antrean media",
       "timeout": "Batas waktu total media",
       "ffmpeg": "Proses FFmpeg bersamaan",
-      "size": { "image": "Batas gambar", "audio": "Batas audio", "video": "Batas video", "document": "Batas dokumen", "sticker": "Batas stiker" },
+      "size": {
+        "image": "Batas gambar",
+        "audio": "Batas audio",
+        "video": "Batas video",
+        "document": "Batas dokumen",
+        "sticker": "Batas stiker"
+      },
       "providerRetries": "Percobaan per provider YouTube",
       "retryDelay": "Jeda antar percobaan",
       "maxFailures": "Kegagalan sebelum cooldown",
       "cooldown": "Cooldown provider",
       "logLevel": "Level log",
       "maxBackups": "Jumlah backup pembaruan",
-      "jobs": "job", "messages": "pesan", "seconds": "detik", "attempts": "percobaan", "failures": "kegagalan", "minutes": "menit", "backups": "backup",
+      "jobs": "job",
+      "messages": "pesan",
+      "seconds": "detik",
+      "attempts": "percobaan",
+      "failures": "kegagalan",
+      "minutes": "menit",
+      "backups": "backup",
       "invalidRange": "Masukkan bilangan bulat antara {{min}} dan {{max}}.",
       "invalidLogLevel": "Level tidak valid. Gunakan debug, info, warn, error, atau silent.",
       "summary": "Ringkasan operasi:",
@@ -279,7 +291,8 @@
         "funFemalePercent": "persentase (wanita)",
         "funMaleRank": "peringkat (pria)",
         "funFemaleRank": "peringkat (wanita)",
-        "funInteractions": "interaksi"
+        "funInteractions": "interaksi",
+        "ia": "kecerdasan buatan"
       },
       "cmds": {
         "ping": "ping",
@@ -358,7 +371,9 @@
         "menubrincadeira": "menuseru",
         "percent": "percent",
         "rank": "rank",
-        "interact": "interaksi"
+        "interact": "interaksi",
+        "ia": "ia",
+        "menuia": "menuia"
       }
     },
     "play": {
@@ -651,7 +666,9 @@
     "statusbot": {
       "text": "╭─「 *STATUS BOT* 」\n│\n│ bot: {{bot}}\n│ pemilik: {{owner}}\n│ nomor: {{ownerNumber}}\n│ jid: {{user}}\n│ prefiks global: {{prefix}}\n│ bahasa: {{language}}\n│ auto update: {{autoUpdate}}\n│ anti-private: {{antiPrivate}}\n│ grup tersimpan: {{groups}}\n│ grup bangp: {{bannedGroups}}\n│ pengguna diblokir: {{blockedUsers}}\n│ perintah diblokir: {{blockedCommands}}\n│ uptime: {{uptime}}\n│\n╰─"
     },
-    "statusVersion": { "text": "╭─「 *VERSI* 」\n│ aplikasi: {{version}}\n│ commit: {{commit}}\n│ skema: {{schema}}\n╰─" },
+    "statusVersion": {
+      "text": "╭─「 *VERSI* 」\n│ aplikasi: {{version}}\n│ commit: {{commit}}\n│ skema: {{schema}}\n╰─"
+    },
     "statusMetrics": {
       "text": "╭─「 *METRIK* 」\n│ pesan: {{messages}} · galat: {{messageErrors}}\n│ proses aktif/menunggu: {{messageActive}}/{{messagePending}}\n│ dibuang/timeout: {{messageDropped}}/{{messageTimeouts}}\n│ perintah: {{commands}} · galat: {{commandErrors}} · ditolak: {{denied}}\n│ media ok/galat: {{mediaSuccess}}/{{mediaErrors}} · byte: {{mediaBytes}}\n│ antrean aktif/tertunda: {{active}}/{{pending}} · ffmpeg: {{ffmpeg}}\n│ cache hit: {{cacheRate}} · koneksi ulang: {{reconnects}}\n│ rata-rata perintah/media: {{avgCommand}} / {{avgMedia}}\n│ rss/heap/cpu: {{rss}} / {{heap}} / {{cpu}}\n│ kegagalan perintah: {{commandFailures}}\n│ kegagalan provider: {{providerFailures}}\n╰─"
     },

@@ -57,14 +57,26 @@
       "maxPending": "Maksimum medya kuyruğu",
       "timeout": "Toplam medya zaman aşımı",
       "ffmpeg": "Eşzamanlı FFmpeg işlemleri",
-      "size": { "image": "Görsel sınırı", "audio": "Ses sınırı", "video": "Video sınırı", "document": "Belge sınırı", "sticker": "Sticker sınırı" },
+      "size": {
+        "image": "Görsel sınırı",
+        "audio": "Ses sınırı",
+        "video": "Video sınırı",
+        "document": "Belge sınırı",
+        "sticker": "Sticker sınırı"
+      },
       "providerRetries": "YouTube sağlayıcısı başına deneme",
       "retryDelay": "Denemeler arası bekleme",
       "maxFailures": "Cooldown öncesi hata",
       "cooldown": "Sağlayıcı cooldown süresi",
       "logLevel": "Log seviyesi",
       "maxBackups": "Güncelleme backup sayısı",
-      "jobs": "iş", "messages": "mesaj", "seconds": "saniye", "attempts": "deneme", "failures": "hata", "minutes": "dakika", "backups": "backup",
+      "jobs": "iş",
+      "messages": "mesaj",
+      "seconds": "saniye",
+      "attempts": "deneme",
+      "failures": "hata",
+      "minutes": "dakika",
+      "backups": "backup",
       "invalidRange": "{{min}} ile {{max}} arasında bir tam sayı girin.",
       "invalidLogLevel": "Geçersiz seviye. debug, info, warn, error veya silent kullanın.",
       "summary": "İşlem özeti:",
@@ -279,7 +291,8 @@
         "funFemalePercent": "yüzdeler (kadın)",
         "funMaleRank": "sıralamalar (erkek)",
         "funFemaleRank": "sıralamalar (kadın)",
-        "funInteractions": "etkileşimler"
+        "funInteractions": "etkileşimler",
+        "ia": "yapay zeka"
       },
       "cmds": {
         "ping": "ping",
@@ -358,7 +371,9 @@
         "menubrincadeira": "eglencemenu",
         "percent": "percent",
         "rank": "rank",
-        "interact": "etkilesim"
+        "interact": "etkilesim",
+        "ia": "ia",
+        "menuia": "menuia"
       }
     },
     "play": {
@@ -651,7 +666,9 @@
     "statusbot": {
       "text": "╭─「 *BOT DURUMU* 」\n│\n│ bot: {{bot}}\n│ sahip: {{owner}}\n│ numara: {{ownerNumber}}\n│ jid: {{user}}\n│ genel önek: {{prefix}}\n│ dil: {{language}}\n│ otomatik güncelleme: {{autoUpdate}}\n│ anti-pv: {{antiPrivate}}\n│ kayıtlı gruplar: {{groups}}\n│ bangp grupları: {{bannedGroups}}\n│ engellenen kullanıcılar: {{blockedUsers}}\n│ engellenen komutlar: {{blockedCommands}}\n│ çalışma süresi: {{uptime}}\n│\n╰─"
     },
-    "statusVersion": { "text": "╭─「 *SÜRÜM* 」\n│ uygulama: {{version}}\n│ commit: {{commit}}\n│ şema: {{schema}}\n╰─" },
+    "statusVersion": {
+      "text": "╭─「 *SÜRÜM* 」\n│ uygulama: {{version}}\n│ commit: {{commit}}\n│ şema: {{schema}}\n╰─"
+    },
     "statusMetrics": {
       "text": "╭─「 *METRİKLER* 」\n│ mesajlar: {{messages}} · hatalar: {{messageErrors}}\n│ işlem aktif/bekleyen: {{messageActive}}/{{messagePending}}\n│ atılan/zaman aşımı: {{messageDropped}}/{{messageTimeouts}}\n│ komutlar: {{commands}} · hatalar: {{commandErrors}} · reddedilen: {{denied}}\n│ medya ok/hata: {{mediaSuccess}}/{{mediaErrors}} · bayt: {{mediaBytes}}\n│ kuyruk aktif/bekleyen: {{active}}/{{pending}} · ffmpeg: {{ffmpeg}}\n│ önbellek isabeti: {{cacheRate}} · yeniden bağlantı: {{reconnects}}\n│ ortalama komut/medya: {{avgCommand}} / {{avgMedia}}\n│ rss/heap/cpu: {{rss}} / {{heap}} / {{cpu}}\n│ komut hataları: {{commandFailures}}\n│ sağlayıcı hataları: {{providerFailures}}\n╰─"
     },

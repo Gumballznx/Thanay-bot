@@ -53,12 +53,37 @@
       "messageConcurrent": "بیک وقت پراسیس ہونے والے پیغامات",
       "messagePending": "زیادہ سے زیادہ منتظر پیغامات",
       "messageTimeout": "پیغام قطار کی وقت حد",
-      "maxConcurrent": "بیک وقت میڈیا کارروائیاں", "maxPending": "میڈیا قطار کی زیادہ سے زیادہ حد", "timeout": "میڈیا کی کل وقت حد", "ffmpeg": "بیک وقت FFmpeg عمل",
-      "size": { "image": "تصویر کی حد", "audio": "آڈیو کی حد", "video": "ویڈیو کی حد", "document": "دستاویز کی حد", "sticker": "اسٹیکر کی حد" },
-      "providerRetries": "فی YouTube پرووائیڈر کوششیں", "retryDelay": "کوششوں کے درمیان وقفہ", "maxFailures": "کول ڈاؤن سے پہلے ناکامیاں", "cooldown": "پرووائیڈر کول ڈاؤن", "logLevel": "لاگ سطح", "maxBackups": "اپ ڈیٹ بیک اپ کی تعداد",
-      "jobs": "کام", "messages": "پیغامات", "seconds": "سیکنڈ", "attempts": "کوششیں", "failures": "ناکامیاں", "minutes": "منٹ", "backups": "بیک اپ",
-      "invalidRange": "{{min}} اور {{max}} کے درمیان عدد درج کریں۔", "invalidLogLevel": "غلط سطح۔ debug، info، warn، error یا silent استعمال کریں۔",
-      "summary": "عملی خلاصہ:", "confirm": "یہ اعلیٰ ترتیب محفوظ کریں؟", "cancelled": "اعلیٰ ترتیب منسوخ ہو گئی۔", "saved": "اعلیٰ ترتیب محفوظ ہو گئی۔", "restartRequired": "نئی ترتیبات لاگو کرنے کے لیے بوٹ دوبارہ شروع کریں۔"
+      "maxConcurrent": "بیک وقت میڈیا کارروائیاں",
+      "maxPending": "میڈیا قطار کی زیادہ سے زیادہ حد",
+      "timeout": "میڈیا کی کل وقت حد",
+      "ffmpeg": "بیک وقت FFmpeg عمل",
+      "size": {
+        "image": "تصویر کی حد",
+        "audio": "آڈیو کی حد",
+        "video": "ویڈیو کی حد",
+        "document": "دستاویز کی حد",
+        "sticker": "اسٹیکر کی حد"
+      },
+      "providerRetries": "فی YouTube پرووائیڈر کوششیں",
+      "retryDelay": "کوششوں کے درمیان وقفہ",
+      "maxFailures": "کول ڈاؤن سے پہلے ناکامیاں",
+      "cooldown": "پرووائیڈر کول ڈاؤن",
+      "logLevel": "لاگ سطح",
+      "maxBackups": "اپ ڈیٹ بیک اپ کی تعداد",
+      "jobs": "کام",
+      "messages": "پیغامات",
+      "seconds": "سیکنڈ",
+      "attempts": "کوششیں",
+      "failures": "ناکامیاں",
+      "minutes": "منٹ",
+      "backups": "بیک اپ",
+      "invalidRange": "{{min}} اور {{max}} کے درمیان عدد درج کریں۔",
+      "invalidLogLevel": "غلط سطح۔ debug، info، warn، error یا silent استعمال کریں۔",
+      "summary": "عملی خلاصہ:",
+      "confirm": "یہ اعلیٰ ترتیب محفوظ کریں؟",
+      "cancelled": "اعلیٰ ترتیب منسوخ ہو گئی۔",
+      "saved": "اعلیٰ ترتیب محفوظ ہو گئی۔",
+      "restartRequired": "نئی ترتیبات لاگو کرنے کے لیے بوٹ دوبارہ شروع کریں۔"
     },
     "connection": {
       "title": "کنیکشن کا طریقہ",
@@ -266,7 +291,8 @@
         "funFemalePercent": "فیصد (عورت)",
         "funMaleRank": "رینک (مرد)",
         "funFemaleRank": "رینک (عورت)",
-        "funInteractions": "تعاملات"
+        "funInteractions": "تعاملات",
+        "ia": "مصنوعی ذہانت"
       },
       "cmds": {
         "ping": "ping",
@@ -345,7 +371,9 @@
         "menubrincadeira": "funmenu",
         "percent": "percent",
         "rank": "rank",
-        "interact": "interact"
+        "interact": "interact",
+        "ia": "ia",
+        "menuia": "menuia"
       }
     },
     "play": {
@@ -644,7 +672,9 @@
     "statusbot": {
       "text": "╭─「 *بوٹ کی حالت* 」\n│\n│ بوٹ: {{bot}}\n│ مالک: {{owner}}\n│ نمبر: {{ownerNumber}}\n│ jid: {{user}}\n│ عالمی پریفکس: {{prefix}}\n│ زبان: {{language}}\n│ خودکار اپ ڈیٹ: {{autoUpdate}}\n│ اینٹی پرائیویٹ: {{antiPrivate}}\n│ محفوظ گروپس: {{groups}}\n│ bangp گروپس: {{bannedGroups}}\n│ بلاک کیے گئے صارفین: {{blockedUsers}}\n│ بلاک کیے گئے کمانڈز: {{blockedCommands}}\n│ چلنے کا وقت: {{uptime}}\n│\n╰─"
     },
-    "statusVersion": { "text": "╭─「 *ورژن* 」\n│ ایپ: {{version}}\n│ commit: {{commit}}\n│ schema: {{schema}}\n╰─" },
+    "statusVersion": {
+      "text": "╭─「 *ورژن* 」\n│ ایپ: {{version}}\n│ commit: {{commit}}\n│ schema: {{schema}}\n╰─"
+    },
     "statusMetrics": {
       "text": "╭─「 *میٹرکس* 」\n│ پیغامات: {{messages}} · غلطیاں: {{messageErrors}}\n│ پراسیس فعال/منتظر: {{messageActive}}/{{messagePending}}\n│ خارج/ٹائم آؤٹ: {{messageDropped}}/{{messageTimeouts}}\n│ کمانڈز: {{commands}} · غلطیاں: {{commandErrors}} · مسترد: {{denied}}\n│ میڈیا کامیاب/غلطی: {{mediaSuccess}}/{{mediaErrors}} · بائٹس: {{mediaBytes}}\n│ قطار فعال/منتظر: {{active}}/{{pending}} · ffmpeg: {{ffmpeg}}\n│ کیش ہٹ: {{cacheRate}} · دوبارہ رابطے: {{reconnects}}\n│ اوسط کمانڈ/میڈیا: {{avgCommand}} / {{avgMedia}}\n│ rss/heap/cpu: {{rss}} / {{heap}} / {{cpu}}\n│ کمانڈ ناکامیاں: {{commandFailures}}\n│ پرووائیڈر ناکامیاں: {{providerFailures}}\n╰─"
     },

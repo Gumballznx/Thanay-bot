@@ -60,6 +60,27 @@ describe("matchesOwnerIdentity", () => {
     assert.equal(matchesOwnerIdentity("5511999999999@s.whatsapp.net", {}), false);
   });
 
+  it("matches extraOwners by phone digits", () => {
+    assert.equal(
+      matchesOwnerIdentity("258835152398@s.whatsapp.net", {
+        ownerNumber: "258879116693",
+        extraOwners: ["258835152398"],
+      }),
+      true,
+    );
+  });
+
+  it("matches extraOwners by cached LID", () => {
+    assert.equal(
+      matchesOwnerIdentity("extra_owner@lid", {
+        ownerNumber: "258879116693",
+        extraOwners: ["258835152398"],
+        cachedExtraOwnerLids: ["extra_owner@lid"],
+      }),
+      true,
+    );
+  });
+
   it("returns false for empty user id", () => {
     assert.equal(
       matchesOwnerIdentity("", {

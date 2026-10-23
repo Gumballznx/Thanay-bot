@@ -21,7 +21,13 @@ export function extractIdentityDigits(value: string): string {
  */
 export function matchesOwnerIdentity(
   userId: string,
-  owner: { ownerLID?: string; ownerNumber?: string; cachedOwnerLid?: string | null },
+  owner: {
+    ownerLID?: string;
+    ownerNumber?: string;
+    cachedOwnerLid?: string | null;
+    extraOwners?: string[];
+    cachedExtraOwnerLids?: string[];
+  },
 ): boolean {
   const trimmedUser = userId.trim();
   if (!trimmedUser) return false;
@@ -34,22 +40,50 @@ export function matchesOwnerIdentity(
     return true;
   }
 
-  const ownerDigits = extractIdentityDigits(owner.ownerNumber ?? "");
-  if (!ownerDigits) return false;
+  if (owner.cachedExtraOwnerLids && owner.cachedExtraOwnerLids.includes(trimmedUser)) {
+    return true;
+  }
 
-  // Fallback temporário enquanto ownerLID ainda não foi persistido (JID PN)
-  return extractIdentityDigits(trimmedUser) === ownerDigits;
+  const userDigits = extractIdentityDigits(trimmedUser);
+  if (!userDigits) return false;
+
+  const ownerDigits = extractIdentityDigits(owner.ownerNumber ?? "");
+  if (ownerDigits && userDigits === ownerDigits) {
+    return true;
+  }
+
+  if (owner.extraOwners && Array.isArray(owner.extraOwners)) {
+    for (const extra of owner.extraOwners) {
+      const extraDigits = extractIdentityDigits(extra);
+      if (extraDigits && userDigits === extraDigits) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
 
 export async function isOwner(userLID: string): Promise<boolean> {
   const config = await getBotConfig();
 
   let cachedOwnerLid: string | null = null;
-  if (!config.ownerLID && config.ownerNumber) {
-    const ownerDigits = extractIdentityDigits(config.ownerNumber);
-    if (ownerDigits) {
-      await lidCache.load();
+  const cachedExtraOwnerLids: string[] = [];
+
+  const ownerDigits = extractIdentityDigits(config.ownerNumber ?? "");
+  if (ownerDigits || (config.extraOwners && config.extraOwners.length > 0)) {
+    await lidCache.load();
+    if (!config.ownerLID && ownerDigits) {
       cachedOwnerLid = lidCache.get(`${ownerDigits}@s.whatsapp.net`);
+    }
+    if (config.extraOwners) {
+      for (const extra of config.extraOwners) {
+        const d = extractIdentityDigits(extra);
+        if (d) {
+          const lid = lidCache.get(`${d}@s.whatsapp.net`);
+          if (lid) cachedExtraOwnerLids.push(lid);
+        }
+      }
     }
   }
 
@@ -57,17 +91,36 @@ export async function isOwner(userLID: string): Promise<boolean> {
     ownerLID: config.ownerLID,
     ownerNumber: config.ownerNumber,
     cachedOwnerLid,
+    extraOwners: config.extraOwners,
+    cachedExtraOwnerLids,
   });
 }
 
-export function isOwnerFromConfig(userLID: string, config: Pick<BotConfig, "ownerLID" | "ownerNumber">): boolean {
+export function isOwnerFromConfig(
+  userLID: string,
+  config: Pick<BotConfig, "ownerLID" | "ownerNumber"> & { extraOwners?: string[] },
+): boolean {
   const ownerDigits = extractIdentityDigits(config.ownerNumber ?? "");
   const cachedOwnerLid = !config.ownerLID && ownerDigits
     ? lidCache.get(`${ownerDigits}@s.whatsapp.net`)
     : null;
+
+  const cachedExtraOwnerLids: string[] = [];
+  if (config.extraOwners) {
+    for (const extra of config.extraOwners) {
+      const d = extractIdentityDigits(extra);
+      if (d) {
+        const lid = lidCache.get(`${d}@s.whatsapp.net`);
+        if (lid) cachedExtraOwnerLids.push(lid);
+      }
+    }
+  }
+
   return matchesOwnerIdentity(userLID, {
     ownerLID: config.ownerLID,
     ownerNumber: config.ownerNumber,
     cachedOwnerLid,
+    extraOwners: config.extraOwners,
+    cachedExtraOwnerLids,
   });
 }
