@@ -874,8 +874,8 @@
       }
     },
     "autodl": {
-      "enabled": "✅ Bu grupta otomatik medya indirme etkinleştirildi!\nDesteklenen bir bağlantı (TikTok, Instagram, YouTube, Pinterest) gönderildiğinde, bot medyayı otomatik olarak indirecektir.",
-      "disabled": "❌ Bu grupta otomatik medya indirme devre dışı bırakıldı."
+      "enabled": "✅ Bu grupta otomatik indirme etkinleştirildi!",
+      "disabled": "❌ Bu grupta otomatik indirme devre dışı bırakıldı."
     }
   },
   "group": {

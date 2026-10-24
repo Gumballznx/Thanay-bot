@@ -877,8 +877,8 @@
       }
     },
     "autodl": {
-      "enabled": "✅ Téléchargement automatique des médias activé dans ce groupe !\nEn envoyant un lien pris en charge (TikTok, Instagram, YouTube, Pinterest), le bot téléchargera automatiquement le média.",
-      "disabled": "❌ Téléchargement automatique des médias désactivé dans ce groupe."
+      "enabled": "✅ Auto download activé dans ce groupe !",
+      "disabled": "❌ Auto download désactivé dans ce groupe."
     }
   },
   "group": {
