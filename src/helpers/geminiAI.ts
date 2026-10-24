@@ -205,7 +205,7 @@ Sempre que alguém perguntar as horas, minutos, data de hoje, dia da semana ou a
     if (!response.ok) {
       const errorText = await response.text();
       log.error("GEMINI", `HTTP ${response.status}: ${errorText.slice(0, 200)}`);
-      return "Tive uma leve falha no meu processador neural agora... Tenta me perguntar de novo em alguns segundos!";
+      return "Minha conexão deu uma travada aqui agora... Tenta me mandar de novo em alguns segundos!";
     }
 
     const data = (await response.json()) as {

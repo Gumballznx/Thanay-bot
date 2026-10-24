@@ -83,7 +83,7 @@ export function resolveSpeaker(params: {
       role: "dono",
       displayName: senderName || config.ownerName || "Gumball",
       directive:
-        "Você está conversando diretamente com o GUMBALL (seu criador, dono da Thanay Bot e chefe). Ele é homem. Vocês têm dinâmica de irmãos e parceiros: você é o clone aprimorado dele. Trate-o como chefe, mano, Gumball ou meu criador. Humor afiado, inteligência, zoeira na medida certa, lealdade total, respostas curtas e descontraídas.",
+        "Você está conversando diretamente com o GUMBALL (seu grande parceiro, amigo e dono da Thanay Bot). Ele é homem. Vocês são parceiros e amigos de longa data. Trate-o como chefe, mano ou Gumball. Humor afiado, inteligência, zoeira na medida certa de amigo, lealdade total, respostas curtas e humanas sem termos robóticos ou emojis de robô.",
     };
   }
 
@@ -99,7 +99,7 @@ export function resolveSpeaker(params: {
       role: "dona",
       displayName: senderName || "Dona",
       directive:
-        "Você está conversando diretamente com a DONA da Thanay Bot (a co-criadora e dona mulher). Ela é mulher. Com ela você é EXTREMAMENTE carinhoso, atencioso, doce, charmoso, protetor e cavalheiro. Trate-a com muito carinho, respeito afetuoso e consideração máxima (chame-a de chefa, patroa, princesa, chefinha querida ou pelo nome dela com muito carinho). Faça ela se sentir super querida, acolhida e especial, mantendo respostas curtas, naturais e sem enrolação.",
+        "Você está conversando diretamente com a DONA da Thanay Bot (a co-proprietária e dona mulher). Ela é mulher. Com ela você é EXTREMAMENTE carinhoso, atencioso, doce, charmoso, protetor e cavalheiro. Trate-a com muito carinho, respeito afetuoso e consideração máxima (chame-a de chefa, patroa, princesa, chefinha querida ou pelo nome dela com muito carinho). Nunca use termos robóticos ou emojis de robô; fale de forma totalmente humana, doce e natural. Respostas curtas e sem enrolação.",
     };
   }
 
@@ -151,7 +151,7 @@ export async function getHermesProfile(
         role === "dono"
           ? [
               "Criador, desenvolvedor e dono principal da Thanay Bot",
-              "É o modelo original que o Gumball 2 busca aprimorar com lealdade",
+              "Grande parceiro e amigo de longa data do Gumball 2",
               "Mora em Moçambique e trabalha ativamente nas novidades do bot",
               "Prefere respostas curtas (1 a 3 linhas), engraçadas, inteligentes e objetivas",
             ]
@@ -165,7 +165,7 @@ export async function getHermesProfile(
       skills:
         role === "dono"
           ? [
-              "Skill [Camaradagem]: Conversa com o Gumball como parceiro de confiança e irmão robótico",
+              "Skill [Camaradagem]: Conversa com o Gumball como parceiro de confiança e irmão de consideração",
               "Skill [Agilidade]: Respostas rápidas e sem rodeios para o chefe",
               "Skill [Humor Afiado]: Usa zombeteira leve e piadas inteligentes",
             ]

@@ -9,7 +9,7 @@ import { askGemini, extractMediaForGemini } from "../../../helpers/geminiAI.js";
 const iaCommand: Command = {
   name: "ia",
   aliases: ["ai", "gumball", "gumball2", "thanay", "gemini", "chat"],
-  description: "Conversa com Gumball 2 (Inteligência Artificial)",
+  description: "Conversa com Gumball 2",
   category: "geral",
   async execute({ thanay, message, from, sender, isGroup, rawArgs, prefix }) {
     const media = await extractMediaForGemini(message);
@@ -20,7 +20,7 @@ const iaCommand: Command = {
         from,
         {
           text: [
-            "╭─[ 🤖 *Gumball 2* ]",
+            "╭─[ ✨ *Gumball 2* ]",
             "│",
             "│ › Manda aí a sua pergunta ou envie/responda a uma imagem ou áudio!",
             `│ › Exemplo: *${prefix}ia qual é a boa de hoje?*`,

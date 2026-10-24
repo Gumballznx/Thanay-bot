@@ -29,7 +29,7 @@ describe("hermesMemory speaker resolution", () => {
     assert.equal(speaker.role, "dono");
     assert.equal(speaker.key, "dono_gumball");
     assert.ok(speaker.directive.includes("GUMBALL"));
-    assert.ok(speaker.directive.includes("clone"));
+    assert.ok(speaker.directive.includes("parceiro"));
   });
 
   it("identifies Gumball by LID", () => {
