@@ -161,6 +161,30 @@ export async function askGemini(params: {
 
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
 
+  const timezone = config.timezone || "Africa/Maputo";
+  const now = new Date();
+  const dateStr = now.toLocaleDateString("pt-BR", {
+    timeZone: timezone,
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  const timeStr = now.toLocaleTimeString("pt-BR", {
+    timeZone: timezone,
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  });
+
+  const temporalInstruction = `Contexto temporal em tempo real (Fuso horário de Moçambique / ${timezone}):
+- Data atual: ${dateStr}
+- Hora atual: ${timeStr}
+Sempre que alguém perguntar as horas, minutos, data de hoje, dia da semana ou ano, responda com precisão absoluta usando exatamente esta informação temporal em tempo real de Moçambique.`;
+
+  const fullSystemInstruction = `${GUMBALL2_SYSTEM_INSTRUCTION}\n\n${temporalInstruction}`;
+
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 45_000);
@@ -170,7 +194,7 @@ export async function askGemini(params: {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         systemInstruction: {
-          parts: [{ text: GUMBALL2_SYSTEM_INSTRUCTION }],
+          parts: [{ text: fullSystemInstruction }],
         },
         contents: requestContents,
         generationConfig: {
