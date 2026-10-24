@@ -11,7 +11,7 @@ const iaCommand: Command = {
   aliases: ["ai", "gumball", "gumball2", "thanay", "gemini", "chat"],
   description: "Conversa com Gumball 2 (Inteligência Artificial)",
   category: "geral",
-  async execute({ thanay, message, from, rawArgs, prefix }) {
+  async execute({ thanay, message, from, sender, isGroup, rawArgs, prefix }) {
     const media = await extractMediaForGemini(message);
     const prompt = rawArgs.trim();
 
@@ -40,6 +40,8 @@ const iaCommand: Command = {
       chatId: from,
       prompt,
       senderName,
+      senderId: sender,
+      isGroup,
       media: media ?? undefined,
     });
 

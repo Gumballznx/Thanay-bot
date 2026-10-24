@@ -224,6 +224,9 @@ export async function processMessage(
           chatId: from,
           prompt: text,
           senderName: message.pushName || "Dono",
+          senderId: sender,
+          rawSender,
+          isGroup: false,
           media: media ?? undefined,
         });
         await thanay.sendMessage(from, { text: reply }, { quoted: message as WAMessage });

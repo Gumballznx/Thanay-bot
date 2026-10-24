@@ -5,34 +5,22 @@
 import { downloadMediaMessage, proto } from "baileys";
 import { getBotConfig } from "../config.js";
 import { GUMBALL2_SYSTEM_INSTRUCTION } from "../config/persona.js";
+import {
+  buildHermesContext,
+  getHermesHistory,
+  getHermesProfile,
+  resolveSpeaker,
+  saveHermesHistory,
+  triggerHermesLearner,
+  type HermesHistoryEntry,
+  type HermesHistoryPart,
+} from "./hermesMemory.js";
 import { log } from "../logger.js";
-
-type ChatPart =
-  | { text: string }
-  | { inlineData: { mimeType: string; data: string } };
-
-type ChatHistoryEntry = {
-  role: "user" | "model";
-  parts: ChatPart[];
-};
 
 export type GeminiMedia = {
   mimeType: string;
   data: string;
 };
-
-const chatHistories = new Map<string, { lastUsed: number; messages: ChatHistoryEntry[] }>();
-const MAX_HISTORY = 10;
-const HISTORY_TTL_MS = 30 * 60 * 1000;
-
-function cleanupHistories(): void {
-  const now = Date.now();
-  for (const [chatId, data] of chatHistories.entries()) {
-    if (now - data.lastUsed > HISTORY_TTL_MS) {
-      chatHistories.delete(chatId);
-    }
-  }
-}
 
 export async function extractMediaForGemini(message: proto.IWebMessageInfo): Promise<GeminiMedia | null> {
   const m = message.message;
@@ -93,9 +81,12 @@ export async function askGemini(params: {
   chatId: string;
   prompt: string;
   senderName?: string;
+  senderId?: string;
+  rawSender?: string;
+  isGroup?: boolean;
   media?: GeminiMedia;
 }): Promise<string> {
-  const { chatId, prompt, senderName, media } = params;
+  const { chatId, prompt, senderName, senderId, rawSender, isGroup, media } = params;
   const config = await getBotConfig();
 
   const apiKey = config.geminiApiKey?.trim();
@@ -105,19 +96,22 @@ export async function askGemini(params: {
 
   const model = config.geminiModel?.trim() || "gemini-3-flash-preview";
 
-  cleanupHistories();
+  // Identificação Hermes do Interlocutor (Dono Criador, A Dona ou Membro)
+  const speaker = resolveSpeaker({
+    senderId,
+    rawSender,
+    chatId,
+    senderName,
+    config,
+  });
 
-  let conversation = chatHistories.get(chatId);
-  if (!conversation) {
-    conversation = { lastUsed: Date.now(), messages: [] };
-    chatHistories.set(chatId, conversation);
-  }
-  conversation.lastUsed = Date.now();
+  const profile = await getHermesProfile(speaker.key, speaker.role, speaker.displayName);
+  const history = await getHermesHistory(chatId);
 
   const textContent = prompt.trim();
-  const label = senderName ? `[${senderName}]: ${textContent}` : textContent;
+  const label = speaker.displayName ? `[${speaker.displayName}]: ${textContent}` : textContent;
 
-  const currentParts: ChatPart[] = [];
+  const currentParts: HermesHistoryPart[] = [];
   if (label) {
     currentParts.push({ text: label });
   } else if (media) {
@@ -142,17 +136,17 @@ export async function askGemini(params: {
     ? `${label || (media.mimeType.startsWith("audio") ? "[Áudio enviado]" : "[Imagem enviada]")}`
     : label;
 
-  conversation.messages.push({
+  history.push({
     role: "user",
     parts: [{ text: historyText }],
   });
 
-  if (conversation.messages.length > MAX_HISTORY) {
-    conversation.messages = conversation.messages.slice(-MAX_HISTORY);
+  if (history.length > 20) {
+    history.splice(0, history.length - 20);
   }
 
   const requestContents = [
-    ...conversation.messages.slice(0, -1),
+    ...history.slice(0, -1),
     {
       role: "user" as const,
       parts: currentParts,
@@ -183,7 +177,8 @@ export async function askGemini(params: {
 - Hora atual: ${timeStr}
 Sempre que alguém perguntar as horas, minutos, data de hoje, dia da semana ou ano, responda com precisão absoluta usando exatamente esta informação temporal em tempo real de Moçambique.`;
 
-  const fullSystemInstruction = `${GUMBALL2_SYSTEM_INSTRUCTION}\n\n${temporalInstruction}`;
+  const hermesContext = buildHermesContext(profile, speaker.directive);
+  const fullSystemInstruction = `${GUMBALL2_SYSTEM_INSTRUCTION}\n\n${temporalInstruction}\n\n${hermesContext}`;
 
   try {
     const controller = new AbortController();
@@ -228,9 +223,21 @@ Sempre que alguém perguntar as horas, minutos, data de hoje, dia da semana ou a
       return "Fiquei sem palavras pra isso... Tenta mandar de outra forma!";
     }
 
-    conversation.messages.push({
+    history.push({
       role: "model",
       parts: [{ text: reply }],
+    });
+
+    // Salva histórico persistente em disco (perda 0 de memória)
+    await saveHermesHistory(chatId, history);
+
+    // Módulo Hermes de aprendizado em segundo plano (adapta personalidade e aprende novas skills)
+    triggerHermesLearner({
+      profile,
+      userText: prompt,
+      botReply: reply,
+      apiKey,
+      model,
     });
 
     return reply;
