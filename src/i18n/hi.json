@@ -373,7 +373,8 @@
         "rank": "rank",
         "interact": "interact",
         "ia": "ia",
-        "menuia": "menuia"
+        "menuia": "menuia",
+        "autodl": "autodl"
       }
     },
     "play": {
@@ -880,6 +881,10 @@
         "explodir": "{{from}} ने {{to}} को उड़ा दिया! 💥",
         "tomate": "{{from}} ने {{to}} पर टमाटर फेंका! 🍅"
       }
+    },
+    "autodl": {
+      "enabled": "✅ इस समूह में स्वचालित मीडिया डाउनलोड सक्षम किया गया!\nसमर्थित लिंक (TikTok, Instagram, YouTube, Pinterest) भेजने पर, बॉट मीडिया को स्वचालित रूप से डाउनलोड करेगा।",
+      "disabled": "❌ इस समूह में स्वचालित मीडिया डाउनलोड अक्षम किया गया।"
     }
   },
   "group": {

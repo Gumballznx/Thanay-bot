@@ -48,6 +48,7 @@ const menuAdmCommand: Command = {
         `│  ♡ ${prefix}${t("commands.menu.cmds.antidoc")}`,
         `│  ♡ ${prefix}${t("commands.menu.cmds.antilista")}`,
         `│  ♡ ${prefix}${t("commands.menu.cmds.bemvindo")}`,
+        `│  ♡ ${prefix}${t("commands.menu.cmds.autodl")}`,
         "│",
         `├ 〔 ${t("commands.menu.categories.welcome")} 〕`,
         `│  ♡ ${prefix}${t("commands.menu.cmds.legendabv")}`,

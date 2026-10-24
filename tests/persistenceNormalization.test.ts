@@ -49,6 +49,7 @@ describe("persistence normalization", () => {
     assert.equal(result.language, "es");
     assert.equal(result.prefix, "#");
     assert.equal(result.soadmin, true);
+    assert.equal(result.autodl, false);
     assert.equal(result.antimidia.foto, true);
     assert.equal(result.antimidia.video, false);
     assert.deepEqual(result.antilink, { ativo: true, punicao: "banir", texto: "custom" });

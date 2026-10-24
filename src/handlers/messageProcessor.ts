@@ -10,6 +10,7 @@ import { logCommandActivity, logMessageActivity } from "../helpers/activityLog.j
 import { applyAntiLink } from "../helpers/antiLink.js";
 import { applyAntiStealth, countNormalGroupMessage } from "../helpers/antiStealth.js";
 import { tryHandleApkReply } from "../helpers/apkReply.js";
+import { tryHandleAutoDl } from "../helpers/autoDl.js";
 import { askGemini, extractMediaForGemini } from "../helpers/geminiAI.js";
 import { recordGroupActivity } from "../helpers/groupActivity.js";
 import { isAdmin, isBotAdmin } from "../helpers/isAdmin.js";
@@ -198,6 +199,20 @@ export async function processMessage(
     if (apkHandled) {
       await markOwnerReadIfPrivate();
       return;
+    }
+
+    if (isGroup && groupConfig?.autodl) {
+      const autoDlHandled = await tryHandleAutoDl({
+        thanay,
+        from,
+        sender,
+        body,
+        message,
+        t: sessionT,
+      });
+      if (autoDlHandled) {
+        return;
+      }
     }
 
     if (!isGroup && userIsOwner) {

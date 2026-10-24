@@ -5,6 +5,7 @@
 import { proto, WASocket } from "baileys";
 import { getGroup, GroupData } from "../database/groupDB.js";
 import { replaceLocalizedPlaceholders } from "./localizedTokens.js";
+import { detectAutoDlTarget } from "./autoDl.js";
 import { log } from "../logger.js";
 import type { Locale } from "../i18n/index.js";
 
@@ -46,6 +47,9 @@ function detectAntiLink(body: string, config: GroupData): AntiLinkMatch | null {
   }
 
   if (config.antilink.ativo && GENERIC_LINK_REGEX.test(body)) {
+    if (config.autodl && detectAutoDlTarget(body)) {
+      return null;
+    }
     return { key: "antilink", tipo: "link" };
   }
 

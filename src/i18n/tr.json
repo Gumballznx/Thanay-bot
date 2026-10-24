@@ -373,7 +373,8 @@
         "rank": "rank",
         "interact": "etkilesim",
         "ia": "ia",
-        "menuia": "menuia"
+        "menuia": "menuia",
+        "autodl": "autodl"
       }
     },
     "play": {
@@ -871,6 +872,10 @@
         "explodir": "{{from}}, {{to}} kişisini patlattı! 💥",
         "tomate": "{{from}}, {{to}} kişisine domates fırlattı! 🍅"
       }
+    },
+    "autodl": {
+      "enabled": "✅ Bu grupta otomatik medya indirme etkinleştirildi!\nDesteklenen bir bağlantı (TikTok, Instagram, YouTube, Pinterest) gönderildiğinde, bot medyayı otomatik olarak indirecektir.",
+      "disabled": "❌ Bu grupta otomatik medya indirme devre dışı bırakıldı."
     }
   },
   "group": {

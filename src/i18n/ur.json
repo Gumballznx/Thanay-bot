@@ -373,7 +373,8 @@
         "rank": "rank",
         "interact": "interact",
         "ia": "ia",
-        "menuia": "menuia"
+        "menuia": "menuia",
+        "autodl": "autodl"
       }
     },
     "play": {
@@ -880,6 +881,10 @@
         "explodir": "{{from}} نے {{to}} کو اڑا دیا! 💥",
         "tomate": "{{from}} نے {{to}} پر ٹماٹر پھینکا! 🍅"
       }
+    },
+    "autodl": {
+      "enabled": "✅ اس گروپ میں خودکار میڈیا ڈاؤن لوڈ فعال کر دیا گیا!\nمعاون لنک (TikTok, Instagram, YouTube, Pinterest) بھیجنے پر، بوٹ خودکار طور پر میڈیا ڈاؤن لوڈ کرے گا۔",
+      "disabled": "❌ اس گروپ میں خودکار میڈیا ڈاؤن لوڈ غیر فعال کر دیا گیا۔"
     }
   },
   "group": {

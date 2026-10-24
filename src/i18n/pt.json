@@ -373,7 +373,8 @@
         "rank": "rank",
         "interact": "interagir",
         "ia": "ia",
-        "menuia": "menuia"
+        "menuia": "menuia",
+        "autodl": "autodl"
       }
     },
     "play": {
@@ -871,6 +872,10 @@
         "explodir": "{{from}} explodiu {{to}}! 💥",
         "tomate": "{{from}} jogou um tomate em {{to}}! 🍅"
       }
+    },
+    "autodl": {
+      "enabled": "✅ Download automático de mídia ativado neste grupo!\nAo enviar um link compatível (TikTok, Instagram, YouTube, Pinterest), o bot baixará a mídia automaticamente.",
+      "disabled": "❌ Download automático de mídia desativado neste grupo."
     }
   },
   "group": {

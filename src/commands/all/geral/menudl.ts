@@ -30,6 +30,7 @@ const menuDlCommand: Command = {
         `│  ♡ ${prefix}${t("commands.menu.cmds.instagram")}`,
         `│  ♡ ${prefix}${t("commands.menu.cmds.pinterest")}`,
         `│  ♡ ${prefix}${t("commands.menu.cmds.apk")}`,
+        `│  ♡ ${prefix}${t("commands.menu.cmds.autodl")}`,
         "│",
         "‧₊˚ ────────────────˚₊‧",
       ].join("\n"),

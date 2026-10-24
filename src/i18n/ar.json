@@ -373,7 +373,8 @@
         "rank": "rank",
         "interact": "interact",
         "ia": "ia",
-        "menuia": "menuia"
+        "menuia": "menuia",
+        "autodl": "autodl"
       }
     },
     "play": {
@@ -871,6 +872,10 @@
         "explodir": "{{from}} فجّر {{to}}! 💥",
         "tomate": "{{from}} رمى طماطم على {{to}}! 🍅"
       }
+    },
+    "autodl": {
+      "enabled": "✅ تم تفعيل التنزيل التلقائي للوسائط في هذه المجموعة!\nعند إرسال رابط مدعوم (TikTok, Instagram, YouTube, Pinterest)، سيقوم البوت بتنزيل الوسائط تلقائيًا.",
+      "disabled": "❌ تم تعطيل التنزيل التلقائي للوسائط في هذه المجموعة."
     }
   },
   "group": {

@@ -373,7 +373,8 @@
         "rank": "rank",
         "interact": "interaksi",
         "ia": "ia",
-        "menuia": "menuia"
+        "menuia": "menuia",
+        "autodl": "autodl"
       }
     },
     "play": {
@@ -871,6 +872,10 @@
         "explodir": "{{from}} meledakkan {{to}}! 💥",
         "tomate": "{{from}} melempar tomat ke {{to}}! 🍅"
       }
+    },
+    "autodl": {
+      "enabled": "✅ Unduhan media otomatis diaktifkan di grup ini!\nSaat mengirim tautan yang didukung (TikTok, Instagram, YouTube, Pinterest), bot akan mengunduh media secara otomatis.",
+      "disabled": "❌ Unduhan media otomatis dinonaktifkan di grup ini."
     }
   },
   "group": {

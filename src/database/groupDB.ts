@@ -20,6 +20,7 @@ export type GroupData = {
   };
   soadmin: boolean;
   modobn: boolean;
+  autodl: boolean;
   antimidia: {
     loc: boolean;
     audio: boolean;
@@ -56,6 +57,7 @@ export const DEFAULT_GROUP: GroupData = {
   },
   soadmin: false,
   modobn: false,
+  autodl: false,
   antimidia: {
     loc: false,
     audio: false,
@@ -167,6 +169,7 @@ export function normalizeGroupData(value: unknown): GroupData {
     },
     soadmin: typeof input.soadmin === "boolean" ? input.soadmin : false,
     modobn: typeof input.modobn === "boolean" ? input.modobn : false,
+    autodl: typeof input.autodl === "boolean" ? input.autodl : false,
     antimidia: {
       loc: typeof media.loc === "boolean" ? media.loc : false,
       audio: typeof media.audio === "boolean" ? media.audio : false,
