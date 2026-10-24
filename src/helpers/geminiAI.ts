@@ -94,7 +94,7 @@ export async function askGemini(params: {
     return "A chave da API Gemini não está configurada em dados/config.json.";
   }
 
-  const model = config.geminiModel?.trim() || "gemini-3-flash-preview";
+  const model = config.geminiModel?.trim() || "gemini-3.5-flash-lite";
 
   // Identificação Hermes do Interlocutor (Dono Criador, A Dona ou Membro)
   const speaker = resolveSpeaker({
@@ -195,9 +195,7 @@ Sempre que alguém perguntar as horas, minutos, data de hoje, dia da semana ou a
         generationConfig: {
           temperature: 0.85,
           maxOutputTokens: 250,
-          thinkingConfig: {
-            thinkingBudget: 0,
-          },
+          ...(!model.includes("flash-lite") ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
         },
       }),
       signal: controller.signal,

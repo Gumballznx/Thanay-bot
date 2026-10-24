@@ -321,7 +321,7 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido com as chaves:
             temperature: 0.1,
             maxOutputTokens: 250,
             responseMimeType: "application/json",
-            thinkingConfig: { thinkingBudget: 0 },
+            ...(!model.includes("flash-lite") ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
           },
         }),
       });
