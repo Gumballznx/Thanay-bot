@@ -49,7 +49,7 @@ export const defaultConfig: BotConfig = {
   timezone: "Africa/Maputo",
   operations: structuredClone(defaultOperationalConfig),
   geminiApiKey: "REDACTED_GEMINI_KEY",
-  geminiModel: "gemini-3.1-flash-lite",
+  geminiModel: "gemini-3-flash-preview",
 };
 
 let botConfigCache: BotConfig | null = null;
@@ -95,7 +95,7 @@ export function normalizeBotConfig(value: unknown): BotConfig {
     timezone: typeof input.timezone === "string" && input.timezone.trim() ? input.timezone.trim() : defaultConfig.timezone,
     operations: normalizeOperationalConfig(input.operations),
     geminiApiKey: typeof input.geminiApiKey === "string" && input.geminiApiKey.trim() ? input.geminiApiKey.trim() : (defaultConfig.geminiApiKey ?? ""),
-    geminiModel: typeof input.geminiModel === "string" && input.geminiModel.trim() ? input.geminiModel.trim() : (defaultConfig.geminiModel ?? "gemini-3.1-flash-lite"),
+    geminiModel: typeof input.geminiModel === "string" && input.geminiModel.trim() ? input.geminiModel.trim() : (defaultConfig.geminiModel ?? "gemini-3-flash-preview"),
   };
   process.env.TZ = normalized.timezone;
   return normalized;

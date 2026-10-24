@@ -103,7 +103,7 @@ export async function askGemini(params: {
     return "A chave da API Gemini não está configurada em dados/config.json.";
   }
 
-  const model = config.geminiModel?.trim() || "gemini-3.1-flash-lite";
+  const model = config.geminiModel?.trim() || "gemini-3-flash-preview";
 
   cleanupHistories();
 
@@ -175,7 +175,7 @@ export async function askGemini(params: {
         contents: requestContents,
         generationConfig: {
           temperature: 0.85,
-          maxOutputTokens: 600,
+          maxOutputTokens: 250,
           thinkingConfig: {
             thinkingBudget: 0,
           },
