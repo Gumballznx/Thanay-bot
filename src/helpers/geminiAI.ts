@@ -163,7 +163,7 @@ export async function askGemini(params: {
 
   try {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 25_000);
+    const timer = setTimeout(() => controller.abort(), 45_000);
 
     const response = await fetch(endpoint, {
       method: "POST",
@@ -176,6 +176,9 @@ export async function askGemini(params: {
         generationConfig: {
           temperature: 0.85,
           maxOutputTokens: 600,
+          thinkingConfig: {
+            thinkingBudget: 0,
+          },
         },
       }),
       signal: controller.signal,
