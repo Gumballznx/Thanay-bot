@@ -3,6 +3,7 @@
  * @project Thanay Bot
  */
 import process from "node:process";
+process.env.TZ = "Africa/Maputo";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { getBotConfig, updateBotConfig } from "./config.js";

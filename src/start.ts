@@ -4,6 +4,7 @@
  */
 import readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
+process.env.TZ = "Africa/Maputo";
 import packageInfo from "../package.json" with { type: "json" };
 import { getBotConfig, saveBotConfig, isLanguageConfigured, type BotConfig } from "./config.js";
 import { startBot } from "./index.js";

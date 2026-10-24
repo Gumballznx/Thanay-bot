@@ -29,6 +29,7 @@ export type BotConfig = {
   ownerLID?: string;
   autoUpdate: boolean;
   language: Locale;
+  timezone: string;
   operations: OperationalConfig;
   geminiApiKey?: string;
   geminiModel?: string;
@@ -45,6 +46,7 @@ export const defaultConfig: BotConfig = {
   extraOwnerLIDs: ["19650096197757@lid"],
   autoUpdate: false,
   language: "pt",
+  timezone: "Africa/Maputo",
   operations: structuredClone(defaultOperationalConfig),
   geminiApiKey: "REDACTED_GEMINI_KEY",
   geminiModel: "gemini-3.1-flash-lite",
@@ -72,7 +74,7 @@ function normalizePrefixMap(value: unknown): BotConfig["prefixByLocale"] {
 
 export function normalizeBotConfig(value: unknown): BotConfig {
   const input = migrateBotConfig(value);
-  return {
+  const normalized: BotConfig = {
     schemaVersion: CURRENT_CONFIG_SCHEMA_VERSION,
     botName: typeof input.botName === "string" && input.botName.trim() ? input.botName : defaultConfig.botName,
     ownerName: typeof input.ownerName === "string" && input.ownerName.trim() ? input.ownerName : defaultConfig.ownerName,
@@ -90,10 +92,13 @@ export function normalizeBotConfig(value: unknown): BotConfig {
     ...(typeof input.ownerLID === "string" && input.ownerLID ? { ownerLID: input.ownerLID } : {}),
     autoUpdate: typeof input.autoUpdate === "boolean" ? input.autoUpdate : defaultConfig.autoUpdate,
     language: typeof input.language === "string" && isValidLocale(input.language) ? input.language : defaultConfig.language,
+    timezone: typeof input.timezone === "string" && input.timezone.trim() ? input.timezone.trim() : defaultConfig.timezone,
     operations: normalizeOperationalConfig(input.operations),
     geminiApiKey: typeof input.geminiApiKey === "string" && input.geminiApiKey.trim() ? input.geminiApiKey.trim() : (defaultConfig.geminiApiKey ?? ""),
     geminiModel: typeof input.geminiModel === "string" && input.geminiModel.trim() ? input.geminiModel.trim() : (defaultConfig.geminiModel ?? "gemini-3.1-flash-lite"),
   };
+  process.env.TZ = normalized.timezone;
+  return normalized;
 }
 
 async function migrateLegacyConfig(): Promise<void> {
