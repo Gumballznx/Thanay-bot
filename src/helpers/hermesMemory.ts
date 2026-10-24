@@ -52,6 +52,7 @@ function sanitizeFileName(raw: string): string {
 
 const profileCache = new Map<string, HermesProfile>();
 const historyCache = new Map<string, HermesHistoryEntry[]>();
+const lastLearnedMap = new Map<string, number>();
 
 /**
  * Identifica o papel do interlocutor (Dono Criador, A Dona ou Membro)
@@ -288,7 +289,12 @@ export function triggerHermesLearner(params: {
   const { profile, userText, botReply, apiKey, model } = params;
 
   const trimmedText = userText.trim();
-  if (!trimmedText || trimmedText.length < 4) return;
+  if (!trimmedText || trimmedText.length < 15) return;
+
+  const now = Date.now();
+  const lastRun = lastLearnedMap.get(profile.key) || 0;
+  if (now - lastRun < 45_000) return; // Cooldown de 45s por perfil para não sobrecarregar cota da API
+  lastLearnedMap.set(profile.key, now);
 
   // Executa em segundo plano sem bloquear o envio de mensagens do WhatsApp
   setImmediate(async () => {

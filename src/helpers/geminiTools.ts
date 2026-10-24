@@ -56,14 +56,14 @@ export const GEMINI_TOOLS_DECLARATION = [
       {
         name: "enviar_recado",
         description:
-          "Envia uma mensagem privada via WhatsApp para o Dono Criador (Gumball), para a Dona (Chefinha) ou para outro usuário específico.",
+          "Envia uma mensagem privada via WhatsApp para o Dono Criador (Gumball), para a Dona (Chefia/Chefinha) ou para outro usuário específico.",
         parameters: {
           type: "OBJECT",
           properties: {
             destinatario: {
               type: "STRING",
               description:
-                "Para quem enviar o recado: 'dono', 'gumball', 'dona', 'chefinha', 'patroa', ou um número de telefone com DDI (ex: 258835152398).",
+                "Para quem enviar o recado: 'dona', 'chefia', 'chefinha', 'patroa', 'dono', 'gumball', ou um número de telefone com DDI (ex: 258835152398).",
             },
             mensagem: {
               type: "STRING",
@@ -208,6 +208,7 @@ export async function executeGeminiToolCall(
       if (
         destRaw.includes("dona") ||
         destRaw.includes("chefa") ||
+        destRaw.includes("chefia") ||
         destRaw.includes("chefinha") ||
         destRaw.includes("patroa")
       ) {

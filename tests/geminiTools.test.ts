@@ -63,6 +63,20 @@ describe("geminiTools helper", () => {
     assert.strictEqual(result.status, "sucesso");
     assert.ok(sentJid.includes("258835152398@s.whatsapp.net"));
     assert.ok(sentContent.includes("te adoro demais"));
+
+    // Testa destinatário 'chefia'
+    const resultChefia = await executeGeminiToolCall(
+      {
+        name: "enviar_recado",
+        args: {
+          destinatario: "chefia",
+          mensagem: "manda um oi para a chefia",
+        },
+      },
+      mockContext,
+    );
+    assert.strictEqual(resultChefia.status, "sucesso");
+    assert.ok(sentJid.includes("258835152398@s.whatsapp.net"));
   });
 
   it("enviar_recado rejects non-owner sending to third party numbers", async () => {
