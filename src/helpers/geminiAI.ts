@@ -2,13 +2,23 @@
  * @author Gumball · github.com/Gumballxnz
  * @project Thanay Bot
  */
+import { downloadMediaMessage, proto } from "baileys";
 import { getBotConfig } from "../config.js";
 import { GUMBALL2_SYSTEM_INSTRUCTION } from "../config/persona.js";
 import { log } from "../logger.js";
 
+type ChatPart =
+  | { text: string }
+  | { inlineData: { mimeType: string; data: string } };
+
 type ChatHistoryEntry = {
   role: "user" | "model";
-  parts: Array<{ text: string }>;
+  parts: ChatPart[];
+};
+
+export type GeminiMedia = {
+  mimeType: string;
+  data: string;
 };
 
 const chatHistories = new Map<string, { lastUsed: number; messages: ChatHistoryEntry[] }>();
@@ -24,12 +34,68 @@ function cleanupHistories(): void {
   }
 }
 
+export async function extractMediaForGemini(message: proto.IWebMessageInfo): Promise<GeminiMedia | null> {
+  const m = message.message;
+  if (!m) return null;
+
+  const directImage = m.imageMessage;
+  const directAudio = m.audioMessage;
+  const directSticker = m.stickerMessage;
+
+  const quoted = m.extendedTextMessage?.contextInfo?.quotedMessage;
+  const quotedImage = quoted?.imageMessage;
+  const quotedAudio = quoted?.audioMessage;
+  const quotedSticker = quoted?.stickerMessage;
+
+  const targetMedia = directImage || directAudio || directSticker;
+  const targetQuoted = quotedImage || quotedAudio || quotedSticker;
+
+  if (!targetMedia && !targetQuoted) return null;
+
+  const isDirect = Boolean(targetMedia);
+  const mediaObj = (targetMedia || targetQuoted)!;
+  const isAudio = Boolean(directAudio || quotedAudio);
+  const isSticker = Boolean(directSticker || quotedSticker);
+
+  let mimeType = isAudio
+    ? "audio/ogg"
+    : isSticker
+      ? "image/webp"
+      : (mediaObj as { mimetype?: string }).mimetype?.split(";")[0] || "image/jpeg";
+
+  if (mimeType.includes("audio")) {
+    if (mimeType.includes("mp4") || mimeType.includes("m4a")) mimeType = "audio/mp4";
+    else if (mimeType.includes("mpeg") || mimeType.includes("mp3")) mimeType = "audio/mp3";
+    else mimeType = "audio/ogg";
+  }
+
+  try {
+    const toDownload = isDirect ? message : { key: message.key, message: quoted! };
+    const buffer = (await downloadMediaMessage(
+      toDownload as Parameters<typeof downloadMediaMessage>[0],
+      "buffer",
+      {},
+    )) as Buffer;
+
+    if (!buffer || buffer.length === 0) return null;
+    if (buffer.length > 15 * 1024 * 1024) return null;
+
+    return {
+      mimeType,
+      data: buffer.toString("base64"),
+    };
+  } catch {
+    return null;
+  }
+}
+
 export async function askGemini(params: {
   chatId: string;
   prompt: string;
   senderName?: string;
+  media?: GeminiMedia;
 }): Promise<string> {
-  const { chatId, prompt, senderName } = params;
+  const { chatId, prompt, senderName, media } = params;
   const config = await getBotConfig();
 
   const apiKey = config.geminiApiKey?.trim();
@@ -37,7 +103,7 @@ export async function askGemini(params: {
     return "A chave da API Gemini não está configurada em dados/config.json.";
   }
 
-  const model = config.geminiModel?.trim() || "gemini-3.5-flash";
+  const model = config.geminiModel?.trim() || "gemini-3.1-flash-lite";
 
   cleanupHistories();
 
@@ -48,21 +114,56 @@ export async function askGemini(params: {
   }
   conversation.lastUsed = Date.now();
 
-  const userText = senderName ? `[${senderName}]: ${prompt}` : prompt;
+  const textContent = prompt.trim();
+  const label = senderName ? `[${senderName}]: ${textContent}` : textContent;
+
+  const currentParts: ChatPart[] = [];
+  if (label) {
+    currentParts.push({ text: label });
+  } else if (media) {
+    const isAudio = media.mimeType.startsWith("audio");
+    currentParts.push({
+      text: isAudio
+        ? "Ouça esta mensagem de áudio com atenção e responda como Gumball 2."
+        : "Veja esta imagem enviada e comente ou responda como Gumball 2.",
+    });
+  }
+
+  if (media) {
+    currentParts.push({
+      inlineData: {
+        mimeType: media.mimeType,
+        data: media.data,
+      },
+    });
+  }
+
+  const historyText = media
+    ? `${label || (media.mimeType.startsWith("audio") ? "[Áudio enviado]" : "[Imagem enviada]")}`
+    : label;
+
   conversation.messages.push({
     role: "user",
-    parts: [{ text: userText }],
+    parts: [{ text: historyText }],
   });
 
   if (conversation.messages.length > MAX_HISTORY) {
     conversation.messages = conversation.messages.slice(-MAX_HISTORY);
   }
 
+  const requestContents = [
+    ...conversation.messages.slice(0, -1),
+    {
+      role: "user" as const,
+      parts: currentParts,
+    },
+  ];
+
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
 
   try {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 20_000);
+    const timer = setTimeout(() => controller.abort(), 25_000);
 
     const response = await fetch(endpoint, {
       method: "POST",
@@ -71,7 +172,7 @@ export async function askGemini(params: {
         systemInstruction: {
           parts: [{ text: GUMBALL2_SYSTEM_INSTRUCTION }],
         },
-        contents: conversation.messages,
+        contents: requestContents,
         generationConfig: {
           temperature: 0.85,
           maxOutputTokens: 600,

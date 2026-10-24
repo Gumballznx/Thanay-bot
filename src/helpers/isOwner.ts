@@ -26,6 +26,7 @@ export function matchesOwnerIdentity(
     ownerNumber?: string;
     cachedOwnerLid?: string | null;
     extraOwners?: string[];
+    extraOwnerLIDs?: string[];
     cachedExtraOwnerLids?: string[];
   },
 ): boolean {
@@ -33,6 +34,10 @@ export function matchesOwnerIdentity(
   if (!trimmedUser) return false;
 
   if (owner.ownerLID && trimmedUser === owner.ownerLID) {
+    return true;
+  }
+
+  if (owner.extraOwnerLIDs && owner.extraOwnerLIDs.includes(trimmedUser)) {
     return true;
   }
 
@@ -92,13 +97,14 @@ export async function isOwner(userLID: string): Promise<boolean> {
     ownerNumber: config.ownerNumber,
     cachedOwnerLid,
     extraOwners: config.extraOwners,
+    extraOwnerLIDs: config.extraOwnerLIDs,
     cachedExtraOwnerLids,
   });
 }
 
 export function isOwnerFromConfig(
   userLID: string,
-  config: Pick<BotConfig, "ownerLID" | "ownerNumber"> & { extraOwners?: string[] },
+  config: Pick<BotConfig, "ownerLID" | "ownerNumber"> & { extraOwners?: string[]; extraOwnerLIDs?: string[] },
 ): boolean {
   const ownerDigits = extractIdentityDigits(config.ownerNumber ?? "");
   const cachedOwnerLid = !config.ownerLID && ownerDigits
@@ -121,6 +127,7 @@ export function isOwnerFromConfig(
     ownerNumber: config.ownerNumber,
     cachedOwnerLid,
     extraOwners: config.extraOwners,
+    extraOwnerLIDs: config.extraOwnerLIDs,
     cachedExtraOwnerLids,
   });
 }

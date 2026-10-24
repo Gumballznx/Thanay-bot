@@ -81,6 +81,17 @@ describe("matchesOwnerIdentity", () => {
     );
   });
 
+  it("matches extraOwners by extraOwnerLIDs", () => {
+    assert.equal(
+      matchesOwnerIdentity("19650096197757@lid", {
+        ownerNumber: "258879116693",
+        extraOwners: ["258835152398"],
+        extraOwnerLIDs: ["19650096197757@lid"],
+      }),
+      true,
+    );
+  });
+
   it("returns false for empty user id", () => {
     assert.equal(
       matchesOwnerIdentity("", {

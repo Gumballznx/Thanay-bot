@@ -4,7 +4,7 @@
  */
 import { WAMessage } from "baileys";
 import { Command } from "../../../types/Command.js";
-import { askGemini } from "../../../helpers/geminiAI.js";
+import { askGemini, extractMediaForGemini } from "../../../helpers/geminiAI.js";
 
 const iaCommand: Command = {
   name: "ia",
@@ -12,16 +12,17 @@ const iaCommand: Command = {
   description: "Conversa com Gumball 2 (Inteligência Artificial)",
   category: "geral",
   async execute({ thanay, message, from, rawArgs, prefix }) {
+    const media = await extractMediaForGemini(message);
     const prompt = rawArgs.trim();
 
-    if (!prompt) {
+    if (!prompt && !media) {
       await thanay.sendMessage(
         from,
         {
           text: [
             "╭─[ 🤖 *Gumball 2* ]",
             "│",
-            "│ › Manda aí a sua pergunta ou ideia!",
+            "│ › Manda aí a sua pergunta ou envie/responda a uma imagem ou áudio!",
             `│ › Exemplo: *${prefix}ia qual é a boa de hoje?*`,
             "│",
             "╰──────────────────────",
@@ -39,6 +40,7 @@ const iaCommand: Command = {
       chatId: from,
       prompt,
       senderName,
+      media: media ?? undefined,
     });
 
     await thanay.sendMessage(from, { text: reply }, { quoted: message as WAMessage });

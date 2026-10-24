@@ -1,7 +1,8 @@
 import { describe, it } from "node:test";
 import assert from "node:assert";
 import type { WASocket } from "baileys";
-import { authorizeCommand, parseCommandInput } from "../src/handlers/messageProcessor.js";
+import { authorizeCommand, parseCommandInput, processMessage } from "../src/handlers/messageProcessor.js";
+import { CommandHandler } from "../src/handlers/commandHandler.js";
 import type { Command } from "../src/types/Command.js";
 
 const command: Command = {
@@ -64,5 +65,105 @@ describe("messageProcessor command stages", () => {
     const state = authorization({ userIsAdmin: async () => true });
     assert.equal(await authorizeCommand(state.input), true);
     assert.deepEqual(state.sent, []);
+  });
+});
+
+describe("messageProcessor read receipts", () => {
+  it("marks message as read only for owner in PV after command execution", async () => {
+    let commandExecuted = false;
+    const pingCommand: Command = {
+      name: "ping",
+      description: "Ping",
+      category: "all",
+      async execute() {
+        commandExecuted = true;
+      },
+    };
+    const handler = {
+      get: (name: string) => (name === "ping" ? pingCommand : undefined),
+      listNames: () => ["ping"],
+      listUnique: () => [pingCommand],
+    } as unknown as CommandHandler;
+
+    const readKeys: unknown[] = [];
+    const thanay = {
+      readMessages: async (keys: unknown[]) => {
+        readKeys.push(...keys);
+      },
+      sendMessage: async () => {},
+      sendPresenceUpdate: async () => {},
+    } as unknown as WASocket;
+
+    const ownerMsg = {
+      key: { id: "msg-owner-1", remoteJid: "159034049044504@lid", fromMe: false },
+      message: { conversation: "!ping" },
+    };
+
+    await processMessage(thanay, handler, ownerMsg);
+    assert.equal(commandExecuted, true);
+    assert.equal(readKeys.length, 1);
+    assert.deepEqual(readKeys[0], ownerMsg.key);
+  });
+
+  it("does not mark message as read for non-owner in PV", async () => {
+    const pingCommand: Command = {
+      name: "ping",
+      description: "Ping",
+      category: "all",
+      async execute() {},
+    };
+    const handler = {
+      get: (name: string) => (name === "ping" ? pingCommand : undefined),
+      listNames: () => ["ping"],
+      listUnique: () => [pingCommand],
+    } as unknown as CommandHandler;
+
+    const readKeys: unknown[] = [];
+    const thanay = {
+      readMessages: async (keys: unknown[]) => {
+        readKeys.push(...keys);
+      },
+      sendMessage: async () => {},
+      sendPresenceUpdate: async () => {},
+    } as unknown as WASocket;
+
+    const nonOwnerMsg = {
+      key: { id: "msg-user-1", remoteJid: "9999999999@lid", fromMe: false },
+      message: { conversation: "!ping" },
+    };
+
+    await processMessage(thanay, handler, nonOwnerMsg);
+    assert.equal(readKeys.length, 0);
+  });
+
+  it("does not mark message as read for owner in group", async () => {
+    const pingCommand: Command = {
+      name: "ping",
+      description: "Ping",
+      category: "all",
+      async execute() {},
+    };
+    const handler = {
+      get: (name: string) => (name === "ping" ? pingCommand : undefined),
+      listNames: () => ["ping"],
+      listUnique: () => [pingCommand],
+    } as unknown as CommandHandler;
+
+    const readKeys: unknown[] = [];
+    const thanay = {
+      readMessages: async (keys: unknown[]) => {
+        readKeys.push(...keys);
+      },
+      sendMessage: async () => {},
+      sendPresenceUpdate: async () => {},
+    } as unknown as WASocket;
+
+    const groupOwnerMsg = {
+      key: { id: "msg-group-1", remoteJid: "123456789@g.us", participant: "159034049044504@lid", fromMe: false },
+      message: { conversation: "!ping" },
+    };
+
+    await processMessage(thanay, handler, groupOwnerMsg);
+    assert.equal(readKeys.length, 0);
   });
 });

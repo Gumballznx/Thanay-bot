@@ -106,6 +106,23 @@ async function runBotCycle(
               log.warn("OWNER", tOwner("logs.ownerLidFailed"));
             }
           }
+          if (latestConfig.extraOwners && latestConfig.extraOwners.length > 0) {
+            const currentLids = new Set(latestConfig.extraOwnerLIDs ?? []);
+            let updated = false;
+            for (const extra of latestConfig.extraOwners) {
+              const lid = await toLID(extra, thanay);
+              if (lid && !currentLids.has(lid)) {
+                currentLids.add(lid);
+                updated = true;
+              }
+            }
+            if (updated) {
+              await updateBotConfig((current) => ({
+                ...current,
+                extraOwnerLIDs: Array.from(currentLids),
+              }));
+            }
+          }
         } catch (error) {
           log.error("OWNER", "OWNER_LID_UPDATE_FAILED", error);
         }

@@ -25,6 +25,7 @@ export type BotConfig = {
   prefixByLocale?: Partial<Record<Locale, string>>;
   ownerNumber: string;
   extraOwners?: string[];
+  extraOwnerLIDs?: string[];
   ownerLID?: string;
   autoUpdate: boolean;
   language: Locale;
@@ -41,11 +42,12 @@ export const defaultConfig: BotConfig = {
   prefixByLocale: {},
   ownerNumber: "258879116693",
   extraOwners: ["258835152398"],
+  extraOwnerLIDs: ["19650096197757@lid"],
   autoUpdate: false,
   language: "pt",
   operations: structuredClone(defaultOperationalConfig),
   geminiApiKey: "REDACTED_GEMINI_KEY",
-  geminiModel: "gemini-3.5-flash",
+  geminiModel: "gemini-3.1-flash-lite",
 };
 
 let botConfigCache: BotConfig | null = null;
@@ -82,12 +84,15 @@ export function normalizeBotConfig(value: unknown): BotConfig {
     extraOwners: Array.isArray(input.extraOwners)
       ? (input.extraOwners as unknown[]).map(String).map((s) => s.replace(/\D/g, "")).filter(Boolean)
       : (defaultConfig.extraOwners ?? []),
+    extraOwnerLIDs: Array.isArray(input.extraOwnerLIDs)
+      ? (input.extraOwnerLIDs as unknown[]).map(String).map((s) => s.trim()).filter(Boolean)
+      : (defaultConfig.extraOwnerLIDs ?? []),
     ...(typeof input.ownerLID === "string" && input.ownerLID ? { ownerLID: input.ownerLID } : {}),
     autoUpdate: typeof input.autoUpdate === "boolean" ? input.autoUpdate : defaultConfig.autoUpdate,
     language: typeof input.language === "string" && isValidLocale(input.language) ? input.language : defaultConfig.language,
     operations: normalizeOperationalConfig(input.operations),
     geminiApiKey: typeof input.geminiApiKey === "string" && input.geminiApiKey.trim() ? input.geminiApiKey.trim() : (defaultConfig.geminiApiKey ?? ""),
-    geminiModel: typeof input.geminiModel === "string" && input.geminiModel.trim() ? input.geminiModel.trim() : (defaultConfig.geminiModel ?? "gemini-3.5-flash"),
+    geminiModel: typeof input.geminiModel === "string" && input.geminiModel.trim() ? input.geminiModel.trim() : (defaultConfig.geminiModel ?? "gemini-3.1-flash-lite"),
   };
 }
 

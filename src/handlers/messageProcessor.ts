@@ -10,7 +10,7 @@ import { logCommandActivity, logMessageActivity } from "../helpers/activityLog.j
 import { applyAntiLink } from "../helpers/antiLink.js";
 import { applyAntiStealth, countNormalGroupMessage } from "../helpers/antiStealth.js";
 import { tryHandleApkReply } from "../helpers/apkReply.js";
-import { askGemini } from "../helpers/geminiAI.js";
+import { askGemini, extractMediaForGemini } from "../helpers/geminiAI.js";
 import { recordGroupActivity } from "../helpers/groupActivity.js";
 import { isAdmin, isBotAdmin } from "../helpers/isAdmin.js";
 import { isOwnerFromConfig } from "../helpers/isOwner.js";
@@ -134,6 +134,12 @@ export async function processMessage(
   const getUserAdmin = () => userAdmin ??= isAdmin(from, sender, thanay);
   const getBotAdmin = () => botAdmin ??= isBotAdmin(from, thanay);
 
+  const markOwnerReadIfPrivate = async () => {
+    if (!isGroup && userIsOwner && key) {
+      await thanay.readMessages([key]).catch(() => {});
+    }
+  };
+
   if (!message.message) {
     if (isGroup && !userIsOwner) {
       if (!(await getUserAdmin()) && await getBotAdmin()) {
@@ -189,16 +195,25 @@ export async function processMessage(
     const activityT = createTranslator(runtimeConfig.language || "pt");
     logMessageActivity({ message, from, sender, isGroup, body, t: activityT });
     const apkHandled = await tryHandleApkReply({ thanay, from, sender, body, message, t: sessionT });
-    if (apkHandled) return;
+    if (apkHandled) {
+      await markOwnerReadIfPrivate();
+      return;
+    }
 
-    if (!isGroup && userIsOwner && body.trim()) {
-      await thanay.sendPresenceUpdate("composing", from).catch(() => {});
-      const reply = await askGemini({
-        chatId: from,
-        prompt: body.trim(),
-        senderName: message.pushName || "Dono",
-      });
-      await thanay.sendMessage(from, { text: reply }, { quoted: message as WAMessage });
+    if (!isGroup && userIsOwner) {
+      const media = await extractMediaForGemini(message);
+      const text = body.trim();
+      if (text || media) {
+        await thanay.sendPresenceUpdate("composing", from).catch(() => {});
+        const reply = await askGemini({
+          chatId: from,
+          prompt: text,
+          senderName: message.pushName || "Dono",
+          media: media ?? undefined,
+        });
+        await thanay.sendMessage(from, { text: reply }, { quoted: message as WAMessage });
+        await markOwnerReadIfPrivate();
+      }
     }
     return;
   }
@@ -213,6 +228,7 @@ export async function processMessage(
   if (!command) {
     const similar = findSimilarCommand(commandName, commandHandler.listNames());
     await sendUnknownCommandMessage(thanay, from, sender, prefix, commandName, similar, message, locale);
+    await markOwnerReadIfPrivate();
     return;
   }
 
@@ -231,6 +247,7 @@ export async function processMessage(
   });
   if (!authorized) {
     metrics.denyCommand();
+    await markOwnerReadIfPrivate();
     return;
   }
 
@@ -258,9 +275,11 @@ export async function processMessage(
       t: cmdTranslator,
     });
     metrics.recordCommand(command.name, "success", Date.now() - commandStartedAt);
+    await markOwnerReadIfPrivate();
   } catch (error) {
     metrics.recordCommand(command.name, "failure", Date.now() - commandStartedAt);
     log.error("COMMAND", cmdTranslator("logs.commandError", { commandName }), error);
     await thanay.sendMessage(from, { text: cmdTranslator("errors.commandExecution") });
+    await markOwnerReadIfPrivate();
   }
 }
