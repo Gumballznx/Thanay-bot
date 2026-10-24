@@ -203,12 +203,14 @@ export async function createConnection(authMode: "qr" | "pairing" = "qr", phoneN
     log.info("CONNECTION", t("connection.sessionDetected"));
   }
 
+  let presenceInterval: NodeJS.Timeout | null = null;
+
   const thanay = makeWASocket({
     version,
     auth: state,
     logger,
     syncFullHistory: false,
-    markOnlineOnConnect: false,
+    markOnlineOnConnect: true,
   });
 
   thanay.ev.on("creds.update", saveCreds);
@@ -259,9 +261,20 @@ export async function createConnection(authMode: "qr" | "pairing" = "qr", phoneN
 
     if (connection === "open") {
       log.success("CONNECTION", t("connection.connected"));
+      thanay.sendPresenceUpdate("available").catch(() => {});
+      if (!presenceInterval) {
+        presenceInterval = setInterval(() => {
+          thanay.sendPresenceUpdate("available").catch(() => {});
+        }, 20_000);
+        presenceInterval.unref?.();
+      }
     }
 
     if (connection === "close") {
+      if (presenceInterval) {
+        clearInterval(presenceInterval);
+        presenceInterval = null;
+      }
       const statusCode = getDisconnectStatusCode(lastDisconnect?.error);
       const shouldReconnect = logDisconnect(statusCode, t);
 
