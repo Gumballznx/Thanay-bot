@@ -16,6 +16,11 @@ import {
   type HermesHistoryPart,
 } from "./hermesMemory.js";
 import { log } from "../logger.js";
+import {
+  executeGeminiToolCall,
+  GEMINI_TOOLS_DECLARATION,
+  type GeminiToolContext,
+} from "./geminiTools.js";
 
 export type GeminiMedia = {
   mimeType: string;
@@ -85,8 +90,9 @@ export async function askGemini(params: {
   rawSender?: string;
   isGroup?: boolean;
   media?: GeminiMedia;
+  toolContext?: GeminiToolContext;
 }): Promise<string> {
-  const { chatId, prompt, senderName, senderId, rawSender, isGroup, media } = params;
+  const { chatId, prompt, senderName, senderId, rawSender, isGroup, media, toolContext } = params;
   const config = await getBotConfig();
 
   const apiKey = config.geminiApiKey?.trim();
@@ -184,41 +190,98 @@ Sempre que alguém perguntar as horas, minutos, data de hoje, dia da semana ou a
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 45_000);
 
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    let currentContents: Array<any> = [...requestContents];
+    let reply = "";
+    const maxTurns = toolContext ? 3 : 1;
+
+    for (let turn = 0; turn < maxTurns; turn++) {
+      const payload: Record<string, unknown> = {
         systemInstruction: {
           parts: [{ text: fullSystemInstruction }],
         },
-        contents: requestContents,
+        contents: currentContents,
         generationConfig: {
           temperature: 0.85,
           maxOutputTokens: 250,
           ...(!model.includes("flash-lite") ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
         },
-      }),
-      signal: controller.signal,
-    });
-    clearTimeout(timer);
+      };
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      log.error("GEMINI", `HTTP ${response.status}: ${errorText.slice(0, 200)}`);
-      return "Minha conexão deu uma travada aqui agora... Tenta me mandar de novo em alguns segundos!";
+      if (toolContext) {
+        payload.tools = GEMINI_TOOLS_DECLARATION;
+      }
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        log.error("GEMINI", `HTTP ${response.status}: ${errorText.slice(0, 200)}`);
+        clearTimeout(timer);
+        return "Minha conexão deu uma travada aqui agora... Tenta me mandar de novo em alguns segundos!";
+      }
+
+      const data = (await response.json()) as {
+        candidates?: Array<{
+          content?: {
+            parts?: Array<any>;
+          };
+        }>;
+      };
+
+      const candidate = data.candidates?.[0];
+      const parts = candidate?.content?.parts || [];
+
+      // Verifica se o modelo quer chamar uma ferramenta
+      const fnCallPart = parts.find((p: any) => p.functionCall);
+      if (fnCallPart && toolContext) {
+        const fnCall = fnCallPart.functionCall;
+        log.info("GEMINI_AGENT", `Gumball 2 acionou a ferramenta '${fnCall.name}'`);
+
+        // Preserva turno da IA com a chamada (incluindo thoughtSignature e id)
+        currentContents.push({
+          role: "model",
+          parts: [fnCallPart],
+        });
+
+        // Executa a ferramenta real no bot
+        const toolResult = await executeGeminiToolCall(fnCall, toolContext);
+
+        // Envia o retorno da ferramenta como turno user
+        currentContents.push({
+          role: "user",
+          parts: [
+            {
+              functionResponse: {
+                name: fnCall.name,
+                ...(fnCall.id ? { id: fnCall.id } : {}),
+                response: {
+                  output: toolResult,
+                },
+              },
+            },
+          ],
+        });
+
+        // Próximo turno para o modelo formular a resposta humana final
+        continue;
+      }
+
+      const textPart = parts.find((p: any) => p.text)?.text?.trim();
+      if (textPart) {
+        reply = textPart;
+        break;
+      }
     }
 
-    const data = (await response.json()) as {
-      candidates?: Array<{
-        content?: {
-          parts?: Array<{ text?: string }>;
-        };
-      }>;
-    };
+    clearTimeout(timer);
 
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
     if (!reply) {
-      return "Fiquei sem palavras pra isso... Tenta mandar de outra forma!";
+      reply = "Prontinho, já fiz isso aqui pra você!";
     }
 
     history.push({

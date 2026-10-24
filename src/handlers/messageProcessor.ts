@@ -228,6 +228,17 @@ export async function processMessage(
           rawSender,
           isGroup: false,
           media: media ?? undefined,
+          toolContext: {
+            thanay,
+            commandHandler,
+            message,
+            sender,
+            from,
+            isGroup: false,
+            userIsOwner: true,
+            groupCache,
+            locale: sessionLocale,
+          },
         });
         await thanay.sendMessage(from, { text: reply }, { quoted: message as WAMessage });
         await markOwnerReadIfPrivate();

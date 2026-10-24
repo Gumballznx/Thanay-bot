@@ -11,7 +11,8 @@ const iaCommand: Command = {
   aliases: ["ai", "gumball", "gumball2", "thanay", "gemini", "chat"],
   description: "Conversa com Gumball 2",
   category: "geral",
-  async execute({ thanay, message, from, sender, isGroup, rawArgs, prefix }) {
+  async execute(context) {
+    const { thanay, message, from, sender, isGroup, rawArgs, prefix, commandDirectory, groupCache, locale } = context;
     const media = await extractMediaForGemini(message);
     const prompt = rawArgs.trim();
 
@@ -36,6 +37,8 @@ const iaCommand: Command = {
     await thanay.sendPresenceUpdate("composing", from).catch(() => {});
 
     const senderName = message.pushName || "Amigo";
+    const userIsOwner = await context.isOwner();
+
     const reply = await askGemini({
       chatId: from,
       prompt,
@@ -43,6 +46,19 @@ const iaCommand: Command = {
       senderId: sender,
       isGroup,
       media: media ?? undefined,
+      toolContext: {
+        thanay,
+        commandHandler: commandDirectory,
+        message,
+        sender,
+        from,
+        isGroup,
+        userIsOwner,
+        groupCache,
+        locale,
+        isAdmin: context.isAdmin,
+        isBotAdmin: context.isBotAdmin,
+      },
     });
 
     await thanay.sendMessage(from, { text: reply }, { quoted: message as WAMessage });
